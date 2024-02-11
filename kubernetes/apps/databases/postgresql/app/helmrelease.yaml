@@ -90,6 +90,8 @@ spec:
       service:
         type: LoadBalancer
         loadBalancerIP: "${LB_POSTGRESQL_ADDRESS}"
+        annotations:
+          io.cilium/lb-ipam-ips: "${LB_POSTGRESQL_ADDRESS}"
         externalTrafficPolicy: Cluster
         ports:
           postgresql: 5432
