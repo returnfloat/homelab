@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app teslamate
+  namespace: utilities
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: mosquitto
+      namespace: databases
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: "teslamate-external-secret,teslamate-grafana-datasource"
+        pod:
+          securityContext:
+            runAsUser: 1026
+            runAsGroup: 100
+            fsGroup: 100
+        initContainers:
+          01-initdb:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 14.9
+            envFrom:
+              - secretRef:
+                  name: teslamate-external-secret
+        containers:
+          main:
+            image:
+              repository: teslamate/teslamate
+              tag: 1.28.3
+            env:
+              TZ: "${TIMEZONE}"
+              DISABLE_MQTT: "false"
+            envFrom:
+              - secretRef:
+                  name: teslamate-external-secret
+    service:
+      main:
+        ports:
+          http:
+            port: 4000
+    ingress:
+      main:
+        enabled: true
+        primary: true
+        className: internal
+        # annotations:
+        #   nginx.ingress.kubernetes.io/auth-url: |-
+        #     https://ak-outpost-authentik-embedded-outpost.security:9443/outpost.goauthentik.io/auth/nginx
+        #   nginx.ingress.kubernetes.io/auth-signin: |-
+        #     https://teslamate.${SECRET_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+        #   nginx.ingress.kubernetes.io/auth-response-headers: |-
+        #     Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+        #   nginx.ingress.kubernetes.io/auth-snippet: |
+        #     proxy_set_header X-Forwarded-Host $http_host;
+        hosts:
+          - host: &host "teslamate.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - *host

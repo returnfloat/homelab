@@ -1,0 +1,44 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: teslamate-grafana-datasource
+  labels:
+    grafana_datasource: "true"
+    namespace: monitoring
+  namespace: utilities
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  refreshInterval: 30m
+  target:
+    creationPolicy: Owner
+    deletionPolicy: "Delete"
+    template:
+      engineVersion: v2
+      data:
+        teslamate-datasource.yaml: |-
+          apiVersion: 1
+          datasources:
+          - name: TeslaMate
+            type: postgres
+            url: {{ .POSTGRESQL_HOST }}:5432
+            user: {{ .TESLAMATE_DATABASE_USER }}
+            database: {{ .TESLAMATE_DATABASE_NAME }}
+            access: proxy
+            basicAuth: false
+            withCredentials: false
+            isDefault: false
+            secureJsonData:
+              password: {{ .TESLAMATE_DATABASE_PASS }}
+            jsonData:
+              postgresVersion: 1000
+              sslmode: disable
+            version: 1
+            editable: true
+  dataFrom:
+    - extract:
+        key: teslamate-external-secret
+    - extract:
+        key: postgresql-external-secret

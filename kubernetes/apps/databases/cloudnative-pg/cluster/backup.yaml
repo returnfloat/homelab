@@ -1,0 +1,27 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: postgresql-v16
+  namespace: databases
+spec:
+  schedule: "@daily"
+  immediate: true
+  suspend: false
+  backupOwnerReference: self
+  cluster:
+    name: postgresql-v16
+
+# ---
+# apiVersion: postgresql.cnpg.io/v1
+# kind: ScheduledBackup
+# metadata:
+#   name: postgres-v15
+#   namespace: databases
+# spec:
+#   schedule: "@daily"
+#   immediate: true
+#   suspend: false
+#   backupOwnerReference: self
+#   cluster:
+#     name: postgresql-v15

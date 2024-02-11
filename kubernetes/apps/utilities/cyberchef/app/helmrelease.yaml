@@ -1,0 +1,79 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app cyberchef
+  namespace: utilities
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: authentik
+      namespace: security
+  values:
+    annotations:
+      secret.reloader.stakater.com/reload: &secret calibre-external-secret
+    controllers:
+      main:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: docker.io/mpepping/cyberchef
+              tag: v10.5.2@sha256:51cbc1463da6a93a6884268e01759e860288226cf6e2613b3d97e054be82849a
+            resources:
+              requests:
+                cpu: 15m
+                memory: 96M
+              limits:
+                cpu: 50m
+                memory: 128M
+    service:
+      main:
+        ports:
+          http:
+            port: 8000
+    ingress:
+      main:
+        enabled: true
+        className: external
+        # annotations:
+        #   nginx.ingress.kubernetes.io/auth-url: |-
+        #     https://ak-outpost-authentik-embedded-outpost.security.svc.cluster.local:9443/outpost.goauthentik.io/auth/nginx
+        #   nginx.ingress.kubernetes.io/auth-signin: |-
+        #     https://cyberchef.${SECRET_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+        #   nginx.ingress.kubernetes.io/auth-response-headers: |-
+        #     Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+        #   nginx.ingress.kubernetes.io/auth-snippet: |
+        #     proxy_set_header X-Forwarded-Host $http_host;
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+        hosts:
+          - host: &host "cyberchef.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - *host

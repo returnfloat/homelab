@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app immich-microservices
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: immich-typesense
+      namespace: media
+    - name: redis
+      namespace: databases
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: external-secrets
+      namespace: security
+    - name: csi-driver-nfs
+      namespace: storage
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret immich-external-secret
+        pod:
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: *app
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-server
+              tag: v1.89.0
+            command: /bin/sh
+            args:
+              - ./start-microservices.sh
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            envFrom:
+              - secretRef:
+                  name: *secret
+    service:
+      main:
+        enabled: false
+    persistence:
+      library:
+        enabled: true
+        existingClaim: immich-nfs
+        globalMounts:
+          - path: /usr/src/app/upload
+            readOnly: false
+      geocoding-dump:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /usr/src/app/.reverse-geocoding-dump
+            readOnly: false
+      geoname-dump:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /usr/src/app/node_modules/local-reverse-geocoder/geonames_dump
+            readOnly: false
+
+

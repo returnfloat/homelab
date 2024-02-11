@@ -1,0 +1,132 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: postgresql-bitnami
+  namespace: databases
+spec:
+  interval: 15m
+  chart:
+    spec:
+      # renovate: registryUrl=https://charts.bitnami.com/bitnami
+      chart: postgresql
+      version: 12.12.10
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
+    - name: external-secrets
+      namespace: security
+  values:
+    global:
+      postgresql:
+        auth:
+          existingSecret: postgresql-external-secret
+          secretKeys:
+            adminPasswordKey: postgres-password
+            userPasswordKey: password
+            replicationPasswordKey: replication-password
+          username: akash
+          database: akash
+    image:
+      registry: docker.io
+      repository: bitnami/postgresql
+      tag: "15.5.0"
+    diagnosticMode:
+      enabled: false
+      command: ["sleep"]
+      args: ["infinity"]
+    architecture: standalone
+    commonAnnotations:
+      secret.reloader.stakater.com/reload: "postgresql-external-secret"
+    metrics:
+      enabled: true
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 30
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 30
+      serviceMonitor:
+        enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 56M
+        limits:
+          cpu: 50m
+          memory: 64M
+    postgresqlDataDir: /bitnami/postgresql/data
+    postgresqlSharedPreloadLibraries: pgaudit
+    primary:
+      initContainers:
+        - name: chown-data
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ["sh", "-c", "chown -R 1026:100 /bitnami/postgresql && chmod -R 770 /bitnami/postgresql"]
+          securityContext:
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["all"]
+              add: ["CHOWN", "CHMOD"]
+            runAsUser: 0
+            runAsNonRoot: false
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/postgresql
+      service:
+        type: LoadBalancer
+        ports:
+          postgresql: 5432
+      persistence:
+        enabled: true
+        storageClass: nfs-csi
+        accessModes:
+          - ReadWriteOnce
+        size: 10Gi
+        mountPath: /bitnami/postgresql
+      volumePermissions:
+        enabled: true
+      podSecurityContext:
+        enabled: true
+        fsGroup: 100
+      containerSecurityContext:
+        enabled: true
+        runAsUser: 1026
+        runAsNonRoot: true
+      resources:
+        requests:
+          cpu: 50m
+          memory: 512M
+        limits:
+          cpu: 500m
+          memory: 1G
+    backup:
+      enabled: true
+      cronjob:
+        schedule: 0 5 * * 6
+        podSecurityContext:
+          enabled: true
+          fsGroup: 100
+        containerSecurityContext:
+          # enabled: true
+          runAsUser: 1026
+          runAsNonRoot: true
+        storage:
+          storageClass: nfs-csi
+          mountPath: /backup/pgdump
+          accessModes: ["ReadWriteOnce"]
+          size: 8Gi

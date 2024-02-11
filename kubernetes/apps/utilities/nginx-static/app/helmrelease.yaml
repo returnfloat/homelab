@@ -1,0 +1,112 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app nginx-static
+  namespace: utilities
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
+  values:
+    annotations:
+      configMap.reloader.stakater.com/reload: &configmap nginx-static-conf
+    controllers:
+      main:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: nginx
+              tag: stable
+            resources:
+              requests:
+                cpu: 15m
+                memory: 96M
+              limits:
+                cpu: 50m
+                memory: 128M
+    service:
+      main:
+        ports:
+          http:
+            port: 80
+    ingress:
+      main:
+        enabled: true
+        primary: true
+        className: external
+        # annotations:
+        #   nginx.ingress.kubernetes.io/auth-url: |-
+        #     https://ak-outpost-authentik-embedded-outpost.security.svc.cluster.local:9443/outpost.goauthentik.io/auth/nginx
+        #   nginx.ingress.kubernetes.io/auth-signin: |-
+        #     https://static.${SECRET_DOMAIN}/outpost.goauthentik.io/start?rd=$escaped_request_uri
+        #   nginx.ingress.kubernetes.io/auth-response-headers: |-
+        #     Set-Cookie,X-authentik-username,X-authentik-groups,X-authentik-email,X-authentik-name,X-authentik-uid
+        #   nginx.ingress.kubernetes.io/auth-snippet: |
+        #     proxy_set_header X-Forwarded-Host $http_host;
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+        hosts:
+          - host: &host "static.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                    name: main
+                    port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      www:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: nfs-csi
+        type: persistentVolumeClaim
+        retain: true
+        globalMounts:
+          - path: /usr/share/nginx/html
+            readOnly: false
+      cache:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /var/cache/nginx
+            readOnly: false
+      run:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /var/run
+            readOnly: false
+      nginx-conf:
+        enabled: true
+        type: configMap
+        name: nginx-static-conf
+        globalMounts:
+          - path: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+

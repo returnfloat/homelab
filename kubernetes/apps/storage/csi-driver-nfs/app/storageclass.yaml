@@ -1,0 +1,16 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: "nfs-csi"
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: "192.168.90.250"
+  share: "/volume1/homelab"
+  subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+mountOptions: ["hard", "noatime"]
+allowVolumeExpansion: true

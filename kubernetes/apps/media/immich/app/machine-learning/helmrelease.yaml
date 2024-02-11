@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app immich-machine-learning
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: immich-server
+      namespace: media
+    - name: redis
+      namespace: databases
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: external-secrets
+      namespace: security
+    - name: csi-driver-nfs
+      namespace: storage
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret immich-external-secret
+        pod:
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: *app
+        containers:
+          main:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v1.89.0
+            resources:
+              requests:
+                cpu: 15m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            envFrom:
+              - secretRef:
+                  name: *secret
+    service:
+      main:
+        ports:
+          http:
+            port: 3003
+    persistence:
+      library:
+        enabled: true
+        existingClaim: immich-nfs
+        globalMounts:
+          - path: /usr/src/app/upload
+            readOnly: false
+      cache:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /cache
+            readOnly: false

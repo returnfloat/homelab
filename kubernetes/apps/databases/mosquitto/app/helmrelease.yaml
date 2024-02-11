@@ -1,0 +1,101 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: mosquitto
+  namespace: databases
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
+    - name: external-secrets
+      namespace: security
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret "mosquitto-external-secret"
+        containers:
+          main:
+            image:
+              repository: eclipse-mosquitto
+              tag: 2.0.18
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128M
+              limits:
+                cpu: 50m
+                memory: 128M
+            securityContext:
+              runAsUser: 1026
+              runAsGroup: 100
+              fsGroup: 100
+    configMaps:
+      config:
+        enabled: true
+        data:
+          mosquitto.conf: |
+            listener 1883
+            allow_anonymous true
+            persistence true
+            persistence_location /mosquitto/data
+            connection_messages false
+            autosave_interval 1800
+            password_file /etc/mosquitto/passwd
+    service:
+      main:
+        ports:
+          http:
+            enabled: false
+          mqtt:
+            enabled: true
+            port: 1883
+    persistence:
+      config:
+        enabled: true
+        type: configMap
+        name: mosquitto-config
+        globalMounts:
+          - path: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf
+            readOnly: false
+      data:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        storageClass: nfs-csi
+        type: persistentVolumeClaim
+        retain: true
+        globalMounts:
+          - path: /mosquitto/data
+            readOnly: false
+      passwd:
+        enabled: true
+        type: secret
+        name: mosquitto-external-secret
+        globalMounts:
+          - path: /etc/mosquitto/passwd
+            subPath: passwd
+            readOnly: true

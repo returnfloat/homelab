@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+  namespace: flux-system
+data:
+  TIMEZONE: "America/Los_Angeles"
+  CLUSTER_CIDR: "10.69.0.0/16"
+  NODE_CIDR: "192.168.90.0/24"
+  LB_UNIFI_ADDRESS: "192.168.90.200"
+  LB_NPM_ADDRESS: "192.168.90.201"
+  LB_POSTGRESQL_ADDRESS: "192.168.90.202"

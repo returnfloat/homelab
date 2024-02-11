@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app coder
+  namespace: dev
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: coder
+      version: 2.7.2
+      sourceRef:
+        kind: HelmRepository
+        name: coder-v2
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: authentik
+      namespace: security
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: external-secrets
+      namespace: security
+  values:
+    coder:
+      podAnnotations:
+        secret.reloader.stakater.com/reload: "coder-external-secret"
+      replicaCount: 1
+      initContainers:
+        - name: 01-initdb
+          image: ghcr.io/onedr0p/postgres-init:14.9
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: coder-external-secret
+      env:
+        - name: "CODER_ACCESS_URL"
+          value: "https://code.${SECRET_DOMAIN}"
+        - name: "CODER_WILDCARD_ACCESS_URL"
+          value: "*.code.${SECRET_DOMAIN}"
+        - name: "CODER_PROMETHEUS_ENABLE"
+          value: "true"
+      envFrom:
+        - secretRef:
+            name: coder-external-secret
+      service:
+        enabled: true
+        type: LoadBalancer
+        externalTrafficPolicy: Cluster
+        # loadBalancerIP: ""
+      ingress:
+        enable: true
+        className: external
+        annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+        host: "code.${SECRET_DOMAIN}"
+        wildcardHost: "*.code.${SECRET_DOMAIN}"
+      serviceAccount:
+        name: coder
+        workspacePerms: true
+        enableDeployments: true
+      resources: {}

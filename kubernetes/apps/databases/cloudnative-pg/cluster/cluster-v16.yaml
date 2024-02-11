@@ -1,0 +1,84 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgresql-v16
+  namespace: databases
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.0
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  storage:
+    size: 30Gi
+    storageClass: nfs-csi
+  superuserSecret:
+    name: cloudnative-pg-external-secret
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: 512MB
+  monitoring:
+    enablePodMonitor: true
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: &comp bzip2
+        maxParallel: 4
+      destinationPath: &dest s3://postgresql/
+      endpointURL: &minio http://minio.storage:9000
+      serverName: &currentCluster postgres-v16-init
+      s3Credentials: &s3creds
+        accessKeyId:
+          name: cloudnative-pg-external-secret
+          key: aws-access-key-id
+        secretAccessKey:
+          name: cloudnative-pg-external-secret
+          key: aws-secret-access-key
+
+  # bootstrap:
+    # use this to recover a net-new cluster from a backup
+    # recovery:
+    #   source: &previousCluster postgres-v16-init
+
+    # pg_basebackup:
+    #   source: postgres-v15-bitnami
+
+    # use this to 'migrate' from an existing cnpg cluster (e.g. "cluster-pg14") to the new cluster
+    # initdb:
+    #   import:
+    #     type: monolith
+    #     databases:
+    #       - "*"
+    #     roles:
+    #       - "*"
+    #     source:
+    #       externalCluster: postgres-v15-bitnami
+
+  externalClusters:
+    # this represents the s3 backup to restore from. *nota-bene: the backup must be the same major version of the target cluster
+    - name: postgres-v16-init # *previousCluster
+      barmanObjectStore:
+        wal:
+          compression: *comp
+          maxParallel: 4
+        serverName: postgres-v16-init # *previousCluster
+        destinationPath: *dest
+        endpointURL: *minio
+        s3Credentials: *s3creds
+    # this represents an existing cnpg cluster to migrate from (e.g. upgrading from postgres v14 to postgres v15)
+    - name: postgres-v15-bitnami
+      connectionParameters:
+        host: postgresql-bitnami.databases.svc.cluster.local.
+        user: postgres
+      password:
+        name: cloudnative-pg-external-secret
+        key: password

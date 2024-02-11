@@ -1,0 +1,113 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app n8n
+  namespace: automation
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: external-secrets
+      namespace: security
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret n8n-external-secret
+        initContainers:
+          01-initdb:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 14.9
+            envFrom:
+              - secretRef:
+                  name: *secret
+          02-chown-data:
+            image:
+              repository: busybox
+              tag: latest
+            command: ["sh", "-c", "chown -R 1026:100 /home/node/.n8n && chmod -R 777 /home/node/.n8n"]
+            securityContext:
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["all"]
+                add: ["CHOWN", "CHMOD"]
+              runAsUser: 0
+              runAsNonRoot: false
+        containers:
+          main:
+            image:
+              repository: n8nio/n8n
+              tag: 1.27.2
+            env:
+              GENERIC_TIMEZONE: "${TIMEZONE}"
+              EXECUTIONS_TIMEOUT: "600"
+              EXECUTIONS_TIMEOUT_MAX: "1800"
+              N8N_METRICS: "true"
+              N8N_LOG_LEVEL: "info"
+              N8N_PORT: &port "5678"
+            envFrom:
+              - secretRef:
+                  name: *secret
+            resources:
+              requests:
+                cpu: 50m
+                memory: 192M
+              limits:
+                cpu: 500m
+                memory: 1G
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        primary: true
+        className: internal
+        hosts:
+          - host: &host "n8n.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        storageClass: nfs-csi
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+        retain: true
+        size: 20Gi
+        globalMounts:
+          - path: /home/node/.n8n
+            readOnly: false
+

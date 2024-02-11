@@ -1,0 +1,97 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app stash
+  namespace: media
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 2.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: postgresql-bitnami
+      namespace: databases
+    - name: external-secrets
+      namespace: security
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        containers:
+          main:
+            image:
+              repository: stashapp/stash
+              tag: v0.24.3
+            env:
+              STASH_PORT: &port 9999
+              STASH_STASH: "/data"
+              STASH_GENERATED: "/root/.stash/stash-data/generated"
+              STASH_METADATA: "/root/.stash/stash-data/metadata"
+              STASH_BLOBS: "/root/.stash/stash-data/blobs"
+              STASH_CACHE: "/cache"
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        primary: true
+        className: internal
+        hosts:
+          - host: &host "stash.${SECRET_DOMAIN}"
+            paths:
+            - path: /
+              pathType: Prefix
+              service:
+                  name: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        accessMode: ReadWriteOnce
+        storageClass: nfs-csi
+        size: 1Gi
+        type: persistentVolumeClaim
+        retain: true
+        globalMounts:
+          - path: /data
+            readOnly: false
+      config:
+        enabled: true
+        accessMode: ReadWriteOnce
+        size: 1Gi
+        storageClass: nfs-csi
+        type: persistentVolumeClaim
+        retain: true
+        globalMounts:
+          - path: /root/.stash
+            readOnly: false
+      cache:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /cache
+            readOnly: false
+
