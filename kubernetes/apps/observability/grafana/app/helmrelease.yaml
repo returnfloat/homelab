@@ -25,7 +25,7 @@ spec:
   dependsOn:
     - name: openebs
       namespace: openebs-system
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
     - name: postgresql-bitnami
       namespace: databases

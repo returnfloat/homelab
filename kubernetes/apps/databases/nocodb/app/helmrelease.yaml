@@ -30,7 +30,7 @@ spec:
       namespace: databases
     - name: redis
       namespace: databases
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
   values:
     controllers:

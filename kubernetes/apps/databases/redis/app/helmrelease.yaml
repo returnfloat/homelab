@@ -25,7 +25,7 @@ spec:
   uninstall:
     keepHistory: false
   dependsOn:
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
   values:
     architecture: standalone

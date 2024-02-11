@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: csi-driver-nfs
       namespace: storage
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
     - name: postgresql-bitnami
       namespace: databases

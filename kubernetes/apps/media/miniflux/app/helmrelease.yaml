@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: postgresql-bitnami
       namespace: databases
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
   values:
     controllers:

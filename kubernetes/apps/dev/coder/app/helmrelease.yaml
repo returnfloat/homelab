@@ -29,7 +29,7 @@ spec:
       namespace: security
     - name: postgresql-bitnami
       namespace: databases
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
   values:
     coder:

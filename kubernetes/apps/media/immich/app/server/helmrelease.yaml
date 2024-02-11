@@ -32,7 +32,7 @@ spec:
       namespace: databases
     - name: postgresql-bitnami
       namespace: databases
-    - name: external-secrets
+    - name: onepassword-connect
       namespace: security
     - name: csi-driver-nfs
       namespace: storage
