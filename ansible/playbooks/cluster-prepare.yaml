@@ -61,6 +61,7 @@
             dest: /etc/resolv.conf
             content: |
               search .
+              nameserver 192.168.90.1
 
     - name: System Configuration
       notify: Reboot
