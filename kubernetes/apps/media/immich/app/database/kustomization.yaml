@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./external-secret.yaml
+  - ./cluster-v16.yaml
+  - ./service.yaml
+  - ./scheduled-backup.yaml
+  # - ./manual-backup.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/name: immich-db
+      app.kubernetes.io/instance: immich-db
+      app.kubernetes.io/part-of: immich

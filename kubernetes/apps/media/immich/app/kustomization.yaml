@@ -5,10 +5,12 @@ namespace: media
 resources:
   - ./immich-external-secret.yaml
   - ./immich-nfs-pvc.yaml
+  - ./database
   - ./server
   - ./microservices
   - ./machine-learning
   - ./typesense
+
 labels:
   - pairs:
       app.kubernetes.io/name: immich

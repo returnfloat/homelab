@@ -4,4 +4,3 @@ kind: Kustomization
 namespace: databases
 resources:
   - ./helmrelease.yaml
-  - ./cloudnative-pg-external-secret.yaml
