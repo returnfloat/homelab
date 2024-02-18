@@ -8,7 +8,7 @@ spec:
   instances: 1
   # ghcr.io/bo0tzz/cnpgvecto.rs:16.1-v0.1.11
   # ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1-v0.1.13
-  imageName: ghcr.io/gabe565/cloudnativepg-vecto-rs:16.1-7-vectors0.1.11
+  imageName: ghcr.io/gabe565/cloudnativepg-vecto-rs:16.1-vectors0.1.11
   primaryUpdateStrategy: unsupervised
   enableSuperuserAccess: true
   storage:
