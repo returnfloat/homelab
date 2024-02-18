@@ -9,7 +9,7 @@ resources:
   - ./server
   - ./microservices
   - ./machine-learning
-  - ./typesense
+  # - ./typesense
 
 labels:
   - pairs:
