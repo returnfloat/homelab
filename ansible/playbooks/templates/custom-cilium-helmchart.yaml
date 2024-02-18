@@ -8,20 +8,22 @@ spec:
   repo: https://helm.cilium.io/
   chart: cilium
   # renovate: datasource=helm depName=cilium repository=https://helm.cilium.io
-  version: 1.15.0
+  version: 1.15.1
   targetNamespace: kube-system
   bootstrap: true
   valuesContent: |-
     autoDirectNodeRoutes: true
+    bgpControlPlane:
+      enabled: true
     bpf:
-      masquerade: true
+      masquerade: false
     cgroup:
       automount:
         enabled: false
       hostRoot: /sys/fs/cgroup
     cluster:
-      name: home-kubernetes
       id: 1
+      name: home-kubernetes
     containerRuntime:
       integration: containerd
       socketPath: /var/run/k3s/containerd/containerd.sock

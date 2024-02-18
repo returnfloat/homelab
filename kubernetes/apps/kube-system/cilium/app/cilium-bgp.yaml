@@ -23,4 +23,4 @@ metadata:
   name: pool
 spec:
   cidrs:
-    - cidr: "${LOADBALANCER_CIDR}"
+    - cidr: "${BGP_ADVERTISED_CIDR}"
