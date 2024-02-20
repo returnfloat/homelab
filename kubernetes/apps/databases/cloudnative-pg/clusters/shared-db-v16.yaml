@@ -35,10 +35,10 @@ spec:
       serverName: &currBucketFolder postgres-v16-0
       s3Credentials: &s3creds
         accessKeyId:
-          name: cluster-v16-external-secret
+          name: shared-db-external-secret
           key: aws-access-key-id
         secretAccessKey:
-          name: cluster-v16-external-secret
+          name: shared-db-external-secret
           key: aws-secret-access-key
   # ##########################################################################################################
   # Bootstrap a brand new cluster with a new app database and owner.
@@ -48,7 +48,7 @@ spec:
   #     database: akash
   #     owner: akash
   #     secret:
-  #       name: cluster-v16-external-secret
+  #       name: shared-db-external-secret
 
   # ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
@@ -109,7 +109,7 @@ spec:
     # This must be equal or higher PostgreSQL major version as the new cluster
     - name: postgresql-bitnami
       connectionParameters:
-        host: postgresql-bitnami.databases.svc.cluster.local.
+        host: postgresql-bitnami.databases
         user: postgres
       password:
         name: postgresql-superuser-secret
