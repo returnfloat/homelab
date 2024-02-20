@@ -9,4 +9,4 @@ resources:
   - ./redis/ks.yaml
   # - ./nocodb/ks.yaml
   # - ./baserow/ks.yaml
-  # - ./cloudnative-pg/ks.yaml
+  - ./cloudnative-pg/ks.yaml
