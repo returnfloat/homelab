@@ -30,7 +30,7 @@ spec:
       namespace: storage
     - name: onepassword-connect
       namespace: security
-    - name: postgresql-bitnami
+    - name: cloudnative-pg
       namespace: databases
   values:
     controllers:

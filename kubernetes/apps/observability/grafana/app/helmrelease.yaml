@@ -27,7 +27,7 @@ spec:
       namespace: openebs-system
     - name: onepassword-connect
       namespace: security
-    - name: postgresql-bitnami
+    - name: cloudnative-pg
       namespace: databases
     - name: csi-driver-nfs
       namespace: storage

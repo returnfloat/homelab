@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: redis
       namespace: databases
-    - name: postgresql-bitnami
+    - name: cloudnative-pg
       namespace: databases
     - name: onepassword-connect
       namespace: security
