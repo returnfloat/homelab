@@ -2,8 +2,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - ./immich-db-external-secret.yaml
+  - ./immich-db.yaml
   - ./cluster-v16-external-secret.yaml
-  - ./cluster-v16.yaml
-  - ./service.yaml
-  - ./scheduled-backup.yaml
+  # - ./cluster-v16.yaml
+  - ./services.yaml
+  - ./scheduled-backups.yaml
   - ./prometheus-rules.yaml
+  # - ./manual-backups.yaml

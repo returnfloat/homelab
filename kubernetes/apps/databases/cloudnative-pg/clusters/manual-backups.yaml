@@ -1,14 +1,26 @@
----
-apiVersion: postgresql.cnpg.io/v1
-kind: Backup
-metadata:
-  name: immich-db-backup
-  namespace: media
-spec:
-  cluster:
-    name: immich-db
 # ########################################################################################################
 # Trigger a manual backup with this resource.
 # kubectl delete backup -n media immich-db-backup
 # kubectl apply -f kubernetes/apps/media/immich/app/database/manual-backup.yaml
 # ########################################################################################################
+
+# ---
+# apiVersion: postgresql.cnpg.io/v1
+# kind: Backup
+# metadata:
+#   name: postgresql-v16-backup
+#   namespace: databases
+# spec:
+#   cluster:
+#     name: postgresql-v16
+
+# ---
+# apiVersion: postgresql.cnpg.io/v1
+# kind: Backup
+# metadata:
+#   name: immich-db-backup
+#   namespace: databases
+# spec:
+#   cluster:
+#     name: immich-db
+
