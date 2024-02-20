@@ -3,7 +3,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: immich-db
-  namespace: media
+  namespace: databases
 spec:
   instances: 1
   # ghcr.io/tensorchord/cloudnative-pgvecto.rs:16.1-v0.1.13
