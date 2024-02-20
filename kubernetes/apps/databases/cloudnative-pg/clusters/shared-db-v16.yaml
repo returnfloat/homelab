@@ -90,28 +90,28 @@ spec:
   # monolith - Bootstrap the entire cluster
   # microservice - Bootstrap a single database
   # ##########################################################################################################
-  bootstrap:
-    initdb:
-      import:
-        # type: microservice
-        # databases:
-        #   - "akash"
-        # source:
-        #   externalCluster: postgresql-bitnami
-        type: monolith
-        databases:
-          - "*"
-        roles:
-          - "*"
-        source:
-          externalCluster: postgresql-bitnami
-  externalClusters:
-    # This must be equal or higher PostgreSQL major version as the new cluster
-    - name: postgresql-bitnami
-      connectionParameters:
-        host: postgresql-bitnami.databases
-        user: postgres
-      password:
-        name: postgresql-superuser-secret
-        key: password
+  # bootstrap:
+  #   initdb:
+  #     import:
+  #       # type: microservice
+  #       # databases:
+  #       #   - "akash"
+  #       # source:
+  #       #   externalCluster: postgresql-bitnami
+  #       type: monolith
+  #       databases:
+  #         - "*"
+  #       roles:
+  #         - "*"
+  #       source:
+  #         externalCluster: postgresql-bitnami
+  # externalClusters:
+  #   # This must be equal or higher PostgreSQL major version as the new cluster
+  #   - name: postgresql-bitnami
+  #     connectionParameters:
+  #       host: postgresql-bitnami.databases
+  #       user: postgres
+  #     password:
+  #       name: postgresql-superuser-secret
+  #       key: password
 
