@@ -31,7 +31,7 @@ spec:
 #   commonMetadata:
 #     labels:
 #       app.kubernetes.io/name: *cluster
-#   path: ./kubernetes/apps/databases/cloudnative-pg/cluster
+#   path: ./kubernetes/apps/databases/cloudnative-pg/clusters
 #   prune: true
 #   sourceRef:
 #     kind: GitRepository

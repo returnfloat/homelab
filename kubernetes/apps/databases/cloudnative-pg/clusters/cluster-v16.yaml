@@ -1,0 +1,117 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgresql-v16
+  namespace: databases
+spec:
+  instances: 2
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.2
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  storage:
+    size: 30Gi
+    storageClass: nfs-csi
+  superuserSecret:
+    name: postgresql-superuser-secret
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: 512MB
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    retentionPolicy: 30d
+    # ########################################################################################################
+    # Minio bucket configuration for current backups. serverName corresponds to a folder name in the bucket.
+    # Note: Change *currBucketFolder at every new recovery bootstrap.
+    # ########################################################################################################
+    barmanObjectStore:
+      wal:
+        compression: &compr bzip2
+        maxParallel: 4
+      destinationPath: &dest s3://postgresql/
+      endpointURL: &minio http://minio.storage:9000
+      serverName: &currBucketFolder postgres-v16-0
+      s3Credentials: &s3creds
+        accessKeyId:
+          name: cloudnative-pg-external-secret
+          key: aws-access-key-id
+        secretAccessKey:
+          name: cloudnative-pg-external-secret
+          key: aws-secret-access-key
+  # ##########################################################################################################
+  # Bootstrap a brand new cluster with a new app database and owner.
+  # ##########################################################################################################
+  # bootstrap:
+  #   initdb:
+  #     database: akash
+  #     owner: akash
+  #     secret:
+  #       name: cloudnative-pg-external-secret
+
+  # ##########################################################################################################
+  # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
+  # ##########################################################################################################
+  # bootstrap:
+  #   # Use this to recover a net-new cluster from a backup
+  #   recovery:
+  #     source: &prevBucketFolder postgres-v16-0
+  # externalClusters:
+  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+  #   - name: *prevBucketFolder
+  #     barmanObjectStore:
+  #       wal:
+  #         compression: *compr
+  #         maxParallel: 4
+  #       serverName: *prevBucketFolder
+  #       destinationPath: *dest
+  #       endpointURL: *minio
+  #       s3Credentials: *s3creds
+
+  # ##########################################################################################################
+  # Bootstrap from an existing live cluster (same PostgreSQL major version)
+  # ##########################################################################################################
+  # bootstrap:
+  #   pg_basebackup:
+  #     source: postgres-v15-bitnami
+  # externalClusters:
+  #   # This must be the same PostgreSQL major version as the new cluster
+  #   - name: postgres-v15-bitnami
+  #     connectionParameters:
+  #       host: postgresql-bitnami.databases.svc.cluster.local.
+  #       user: postgres
+  #     password:
+  #       name: postgresql-superuser-secret
+  #       key: password
+
+  # ##########################################################################################################
+  # Bootstrap from an existing live cluster (destination PostgreSQL major version higher than source)
+  # monolith - Bootstrap the entire cluster
+  # microservice - Bootstrap a single database
+  # ##########################################################################################################
+  # bootstrap:
+  #   initdb:
+  #     import:
+  #       # type: microservice
+  #       # databases:
+  #       #   - "akash"
+  #       # source:
+  #       #   externalCluster: postgres-v15-bitnami
+  #       type: monolith
+  #       databases:
+  #         - "*"
+  #       roles:
+  #         - "*"
+  #       source:
+  #         externalCluster: postgres-v15-bitnami
+  # externalClusters:
+  #   # This must be equal or higher PostgreSQL major version as the new cluster
+  #   - name: postgres-v15-bitnami
+  #     connectionParameters:
+  #       host: postgresql-bitnami.databases.svc.cluster.local.
+  #       user: postgres
+  #     password:
+  #       name: postgresql-superuser-secret
+  #       key: password
+
