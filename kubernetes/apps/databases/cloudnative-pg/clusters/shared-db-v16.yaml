@@ -16,8 +16,14 @@ spec:
     name: postgresql-superuser-secret
   postgresql:
     parameters:
-      max_connections: "300"
-      shared_buffers: 512MB
+      shared_buffers: "256MB"
+      timezone: "America/Los_Angeles"
+  resources:
+    requests:
+      memory: "512Mi"
+    limits:
+      memory: "1024Mi"
+      cpu: "1000m"
   monitoring:
     enablePodMonitor: true
   backup:

@@ -16,8 +16,17 @@ spec:
   superuserSecret:
     name: postgresql-superuser-secret
   postgresql:
+    parameters:
+      shared_buffers: "64MB"
+      timezone: "America/Los_Angeles"
     shared_preload_libraries:
       - "vectors.so"
+  resources:
+    requests:
+      memory: "128Mi"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
   monitoring:
     enablePodMonitor: true
   backup:
