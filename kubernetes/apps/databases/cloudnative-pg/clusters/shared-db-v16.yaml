@@ -16,6 +16,7 @@ spec:
     name: postgresql-superuser-secret
   postgresql:
     parameters:
+      max_connections: "300"
       shared_buffers: "256MB"
       timezone: "America/Los_Angeles"
   resources:
