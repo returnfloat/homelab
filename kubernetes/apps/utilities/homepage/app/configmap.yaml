@@ -3,23 +3,19 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: homepage-config
+  namespace: utilities
   labels:
     app.kubernetes.io/name: homepage
 data:
   bookmarks.yaml: |
-    - Communitcate:
-        - Discord:
-            - icon: discord.png
-              href: https://discord.com/app
     - Media:
         - YouTube:
             - icon: youtube.png
               href: https://youtube.com/feed/subscriptions
-    - Reading:
-        - Reddit:
-            - icon: reddit.png
-              href: https://reddit.com
     - Git:
+        - homelab:
+            - icon: github.png
+              href: https://github.com/returnfloat/homelab
         - kubesearch:
             - icon: kubernetes-dashboard.png
               href: https://kubesearch.dev
@@ -41,10 +37,12 @@ data:
               tunnelid: "{{HOMEPAGE_VAR_CLOUDFLARED_TUNNELID}}"
               key: "{{HOMEPAGE_VAR_CLOUDFLARED_API_TOKEN}}"
   settings.yaml: |
-    title: Dashboard
+    title: Homelab Dashboard
     theme: dark
     color: slate
     headerStyle: clean
+    target: _blank
+    background: https://source.unsplash.com/random/1920x1080/?nature&w=2560&q=80&orientation=landscape
     layout:
       Home:
         style: column
@@ -57,6 +55,18 @@ data:
         style: column
         icon: mdi-chart-line
   widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
     - resources:
         backend: kubernetes
         cpu: true
