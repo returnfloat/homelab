@@ -50,7 +50,7 @@ spec:
           main:
             image:
               repository: outlinewiki/outline
-              tag: 0.75.0
+              tag: 0.75.2
               pullPolicy: IfNotPresent
             env:
               NODE_ENV: "production"
