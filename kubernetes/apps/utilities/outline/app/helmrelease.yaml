@@ -57,7 +57,7 @@ spec:
               FILE_STORAGE: "local"
               FILE_STORAGE_LOCAL_ROOT_DIR: "/var/lib/outline/data"
               FILE_STORAGE_UPLOAD_MAX_SIZE: 26214400
-              MAXIMUM_IMPORT_SIZE: 5120000
+              FILE_STORAGE_IMPORT_MAX_SIZE: 5120000
               LOG_LEVEL: "info"
               DEFAULT_LANGUAGE: "en_US"
               RATE_LIMITER_ENABLED: "true"
