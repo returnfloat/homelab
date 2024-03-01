@@ -48,7 +48,7 @@ spec:
           main:
             image:
               repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 2.5.3
+              tag: 2.5.4
             env:
               PAPERLESS_PORT: &port 80
               PAPERLESS_TIME_ZONE: "${TIMEZONE}"
