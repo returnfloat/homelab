@@ -6,8 +6,8 @@ resources:
   - ./immich-external-secret.yaml
   - ./immich-nfs-pvc.yaml
   - ./server
-  - ./microservices
-  - ./machine-learning
+  # - ./microservices
+  # - ./machine-learning
   # - ./typesense
 
 labels:
