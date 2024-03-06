@@ -5,9 +5,9 @@ resources:
   - ./namespace.yaml
   - ./cyberchef/ks.yaml
   - ./teslamate/ks.yaml
-  - ./tandoor/ks.yaml
+  # - ./tandoor/ks.yaml
   - ./nginx-static/ks.yaml
-  - ./paperless/ks.yaml
+  # - ./paperless/ks.yaml
   - ./outline/ks.yaml
   - ./drawio/ks.yaml
   - ./homepage/ks.yaml
