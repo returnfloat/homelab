@@ -39,13 +39,6 @@ spec:
         annotations:
           secret.reloader.stakater.com/reload: &secret tandoor-external-secret
           configMap.reloader.stakater.com/reload: tandoor-configmap, tandoor-nginx
-        pod:
-          securityContext:
-            runAsUser: 1026
-            runAsGroup: 100
-            runAsNonRoot: true
-            fsGroup: 100
-            fsGroupChangePolicy: "OnRootMismatch"
         initContainers:
           01-initdb:
             image:
