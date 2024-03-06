@@ -38,7 +38,7 @@ spec:
           main:
             image:
               repository: stashapp/stash
-              tag: v0.24.3
+              tag: v0.25.0
             env:
               STASH_PORT: &port 9999
               STASH_STASH: "/data"
