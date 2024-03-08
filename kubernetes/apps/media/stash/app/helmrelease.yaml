@@ -55,7 +55,7 @@ spec:
             env:
               API_URL: "http://localhost:9999/graphql"
               CACHE_DIR: "/cache"
-              HSP_DIR: "/root/.stash/hsp"
+              HSP_DIR: "/data/hsp"
               DISABLE_CERT_VERIFICATION: false
             envFrom:
               - secretRef:
