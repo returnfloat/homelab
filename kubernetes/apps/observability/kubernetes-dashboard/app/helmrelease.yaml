@@ -23,22 +23,20 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    extraArgs:
-      - --enable-insecure-login
-      - --enable-skip-login
-      - --disable-settings-authorizer
-    ingress:
-      enabled: true
-      ingressClassName: internal
-      annotations:
-        gethomepage.dev/enabled: "true"
-        gethomepage.dev/icon: kubernetes-dashboard.png
-        gethomepage.dev/name: Kubernetes Dashboard
-        gethomepage.dev/group: Observability
-      hosts:
-        - &host "kubernetes.${SECRET_DOMAIN}"
-      tls:
-        - hosts:
-            - *host
+    app:
+      ingress:
+        enabled: true
+        ingressClassName: internal
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: kubernetes-dashboard.png
+          gethomepage.dev/name: Kubernetes Dashboard
+          gethomepage.dev/group: Observability
+        hosts:
+          - "kubernetes.${SECRET_DOMAIN}"
+      # extraArgs:
+      #   - --enable-insecure-login
+      #   - --enable-skip-login
+      #   - --disable-settings-authorizer
     metricsScraper:
       enabled: true
