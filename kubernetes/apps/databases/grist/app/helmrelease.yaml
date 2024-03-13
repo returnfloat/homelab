@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.2/charts/library/common/values.schema.json
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: &app grist
+  namespace: databases
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: databases
+    - name: redis
+      namespace: databases
+    - name: onepassword-connect
+      namespace: security
+  values:
+    controllers:
+      main:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret "grist-external-secret"
+        initContainers:
+          01-initdb:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.2
+            envFrom:
+              - secretRef:
+                  name: *secret
+        containers:
+          main:
+            image:
+              repository: gristlabs/grist
+              tag: 1.1.12
+            env:
+              PORT: &port 8484
+              HOME_PORT: "share"
+              APP_HOME_URL: "https://grist.${SECRET_DOMAIN}"
+            envFrom:
+              - secretRef:
+                  name: *secret
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "grist.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - *host
+    persistence:
+      data:
+        enabled: true
+        storageClass: nfs-csi
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+        retain: true
+        size: 20Gi
+        globalMounts:
+          - path: /persist
+            readOnly: false

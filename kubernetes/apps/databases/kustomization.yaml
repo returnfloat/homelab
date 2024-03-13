@@ -9,4 +9,5 @@ resources:
   - ./redis/ks.yaml
   # - ./nocodb/ks.yaml
   # - ./baserow/ks.yaml
+  - ./grist/ks.yaml
 
