@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: flux-system
-      version: 13.8.3
+      version: 13.8.4
   interval: 30m0s
   maxHistory: 3
   install:
@@ -34,7 +34,7 @@ spec:
   values:
     image:
       repository: bitnami/minio
-      tag: 2024.3.10
+      tag: 2024.3.15
       pullPolicy: IfNotPresent
     podAnnotations:
       secret.reloader.stakater.com/reload: "minio-external-secret"
