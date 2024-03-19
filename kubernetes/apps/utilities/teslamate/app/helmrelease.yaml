@@ -64,7 +64,6 @@ spec:
     ingress:
       app:
         enabled: true
-        primary: true
         className: internal
         annotations:
           nginx.ingress.kubernetes.io/auth-url: |-
