@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.2/charts/library/common/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.4/charts/library/common/values.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
@@ -6,11 +6,11 @@ metadata:
   name: &app grist
   namespace: databases
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 3.0.2
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -34,7 +34,7 @@ spec:
       namespace: security
   values:
     controllers:
-      main:
+      grist:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: &secret "grist-external-secret"
@@ -47,7 +47,7 @@ spec:
               - secretRef:
                   name: *secret
         containers:
-          main:
+          app:
             image:
               repository: gristlabs/grist
               tag: 1.1.12
@@ -59,13 +59,13 @@ spec:
               - secretRef:
                   name: *secret
     service:
-      main:
-        controller: main
+      app:
+        controller: grist
         ports:
           http:
             port: *port
     ingress:
-      main:
+      app:
         enabled: true
         className: internal
         hosts:
@@ -74,7 +74,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  identifier: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
