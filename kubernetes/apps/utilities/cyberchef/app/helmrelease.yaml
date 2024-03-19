@@ -1,16 +1,16 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.4/charts/library/common/values.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: &app cyberchef
   namespace: utilities
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -32,10 +32,10 @@ spec:
     annotations:
       secret.reloader.stakater.com/reload: &secret calibre-external-secret
     controllers:
-      main:
+      cyberchef:
         strategy: RollingUpdate
         containers:
-          main:
+          app:
             image:
               repository: docker.io/mpepping/cyberchef
               tag: v10.8.2@sha256:bfae1e2b525d20328191efd2267eab834cbcdea177bec80c9f68760936b9f702
@@ -47,12 +47,13 @@ spec:
                 cpu: 50m
                 memory: 128M
     service:
-      main:
+      controller: cyberchef
+      app:
         ports:
           http:
             port: 8000
     ingress:
-      main:
+      app:
         enabled: true
         className: internal
         annotations:
@@ -71,7 +72,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:

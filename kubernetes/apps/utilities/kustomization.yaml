@@ -10,5 +10,4 @@ resources:
   # - ./paperless/ks.yaml
   - ./outline/ks.yaml
   - ./drawio/ks.yaml
-  - ./homepage/ks.yaml
 
