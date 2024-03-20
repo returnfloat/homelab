@@ -6,11 +6,11 @@ metadata:
   name: &app stash
   namespace: media
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -32,12 +32,12 @@ spec:
       namespace: security
   values:
     controllers:
-      main:
+      stash:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: &secret "stash-external-secret"
         containers:
-          main:
+          app:
             image:
               repository: stashapp/stash
               tag: v0.25.1
@@ -61,21 +61,19 @@ spec:
               - secretRef:
                   name: stash-external-secret
     service:
-      main:
-        controller: main
-        primary: true
+      app:
+        controller: stash
         ports:
           http:
             port: *port
       vr:
-        controller: main
+        controller: stash
         ports:
           http:
             port: 5000
     ingress:
-      main:
+      app:
         enabled: true
-        primary: true
         className: internal
         hosts:
           - host: &host "stash.${SECRET_DOMAIN}"
@@ -83,14 +81,14 @@ spec:
             - path: /
               pathType: Prefix
               service:
-                  name: main
+                  identifier: app
                   port: http
           - host: &hostvr "stash-vr.${SECRET_DOMAIN}"
             paths:
             - path: /
               pathType: Prefix
               service:
-                  name: vr
+                  identifier: vr
                   port: http
         tls:
           - hosts:
@@ -103,7 +101,6 @@ spec:
         storageClass: nfs-csi
         size: 1Gi
         type: persistentVolumeClaim
-        retain: true
         globalMounts:
           - path: /data
             readOnly: false
@@ -113,7 +110,6 @@ spec:
         size: 1Gi
         storageClass: nfs-csi
         type: persistentVolumeClaim
-        retain: true
         globalMounts:
           - path: /root/.stash
             readOnly: false

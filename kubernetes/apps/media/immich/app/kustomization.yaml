@@ -8,8 +8,6 @@ resources:
   - ./server
   - ./microservices
   - ./machine-learning
-  # - ./typesense
-
 labels:
   - pairs:
       app.kubernetes.io/name: immich

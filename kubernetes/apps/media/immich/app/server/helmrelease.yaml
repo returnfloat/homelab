@@ -6,11 +6,11 @@ metadata:
   name: &app immich-server
   namespace: media
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -36,7 +36,7 @@ spec:
       namespace: storage
   values:
     controllers:
-      main:
+      immich-server:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: &secret immich-external-secret
@@ -57,7 +57,7 @@ spec:
               - secretRef:
                   name: *secret
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v1.98.2
@@ -74,14 +74,14 @@ spec:
               - secretRef:
                   name: *secret
     service:
-      main:
+      app:
+        controller: immich-server
         ports:
           http:
             port: 3001
     ingress:
-      main:
+      app:
         enabled: true
-        primary: true
         className: external
         annotations:
           nginx.ingress.kubernetes.io/proxy-body-size: "0"
@@ -92,7 +92,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
@@ -102,8 +102,8 @@ spec:
         enabled: true
         existingClaim: immich-nfs
         advancedMounts:
-          main:
-            main:
+          immich-server:
+            app:
               - path: /usr/src/app/upload
                 readOnly: false
       config:
@@ -111,10 +111,9 @@ spec:
         accessMode: ReadWriteOnce
         size: 1Gi
         storageClass: nfs-csi
-        retain: true
         advancedMounts:
-          main:
-            main:
+          immich-server:
+            app:
               - path: /config
                 readOnly: false
 
