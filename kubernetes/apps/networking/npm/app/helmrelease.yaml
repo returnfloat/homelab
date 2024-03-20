@@ -1,16 +1,16 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.4/charts/library/common/values.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: &app npm
   namespace: networking
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -30,10 +30,10 @@ spec:
       namespace: storage
   values:
     controllers:
-      main:
+      npm:
         strategy: RollingUpdate
         containers:
-          main:
+          app:
             image:
               repository: jc21/nginx-proxy-manager
               tag: 2.11.1
@@ -47,14 +47,15 @@ spec:
               startup:
                 enabled: false
     service:
-      main:
+      app:
+        controller: npm
         ports:
           http:
             port: 81
       lb:
         enabled: true
         type: LoadBalancer
-        controller: main
+        controller: npm
         externalTrafficPolicy: Cluster
         annotations:
           io.cilium/lb-ipam-ips: "${LB_NPM_ADDRESS}"
@@ -68,9 +69,8 @@ spec:
             port: 443
             protocol: HTTPS
     ingress:
-      main:
+      app:
         enabled: true
-        primary: true
         className: internal
         hosts:
           - host: &host "npm.${SECRET_DOMAIN}"
@@ -78,7 +78,7 @@ spec:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:

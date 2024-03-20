@@ -1,16 +1,16 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2beta2.json
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.4/charts/library/common/values.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: &app unpoller
   namespace: networking
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -32,12 +32,12 @@ spec:
       namespace: security
   values:
     controllers:
-      main:
+      unpoller:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: &secret "unpoller-external-secret"
         containers:
-          main:
+          app:
             image:
               repository: ghcr.io/unpoller/unpoller
               tag: v2.10.0@sha256:c2ac3a1415efeec0ad2a191786e570348748570bbdd414d0a56ef663ee09dca4
@@ -45,13 +45,14 @@ spec:
               - secretRef:
                   name: *secret
     service:
-      main:
+      app:
+        controller: unpoller
         ports:
           http:
             port: 9130
     serviceMonitor:
-      main:
-        enabled: true
+      app:
+        serviceName: unpoller
         endpoints:
           - port: http
             scheme: http
