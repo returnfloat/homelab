@@ -6,11 +6,11 @@ metadata:
   name: &app tandoor
   namespace: utilities
 spec:
-  interval: 15m
+  interval: 30m
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -34,7 +34,7 @@ spec:
       namespace: databases
   values:
     controllers:
-      main:
+      tandoor:
         strategy: Recreate
         annotations:
           secret.reloader.stakater.com/reload: &secret tandoor-external-secret
@@ -52,7 +52,7 @@ spec:
             image:
               repository: public.ecr.aws/nginx/nginx
               tag: 1.25.4
-          main:
+          app:
             image:
               repository: ghcr.io/tandoorrecipes/recipes
               tag: "1.5.14"
@@ -92,21 +92,21 @@ spec:
                   periodSeconds: 10
                   failureThreshold: 30
     service:
-      main:
+      app:
+        controller: tandoor
         ports:
           http:
             port: 80
     ingress:
-      main:
+      app:
         enabled: true
-        primary: true
         className: internal
         hosts:
           - host: &host "tandoor.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: app
                   port: http
         tls:
           - hosts:
@@ -115,8 +115,8 @@ spec:
       files:
         existingClaim: tandoor-pvc
         advancedMounts:
-          main:
-            main:
+          tandoor:
+            app:
               - path: /opt/recipes/mediafiles
                 subPath: mediafiles
               - path: /opt/recipes/staticfiles
@@ -130,7 +130,7 @@ spec:
         type: configMap
         name: tandoor-nginx
         advancedMounts:
-          main:
+          tandoor:
             nginx:
               - path: /etc/nginx/nginx.conf
                 subPath: nginx-config
