@@ -99,7 +99,6 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteOnce
         type: persistentVolumeClaim
-        readOnly: false
         size: 10Gi
         retain: true
         advancedMounts:
