@@ -31,15 +31,6 @@ spec:
     - name: onepassword-connect
       namespace: security
   values:
-    defaultPodOptions:
-      enableServiceLinks: true
-      securityContext:
-        runAsUser: 1026
-        runAsGroup: 100
-        fsGroup: 100
-        fsGroupChangePolicy: "OnRootMismatch"
-        supplementalGroups:
-          - 65539
     controllers:
       mosquitto:
         strategy: RollingUpdate
@@ -57,6 +48,13 @@ spec:
               limits:
                 cpu: 50m
                 memory: 128M
+        pod:
+          securityContext:
+            runAsUser: 1026
+            runAsGroup: 100
+            runAsNonRoot: true
+            fsGroup: 100
+            fsGroupChangePolicy: OnRootMismatch
     configMaps:
       config:
         enabled: true
@@ -72,11 +70,9 @@ spec:
     service:
       app:
         controller: mosquitto
+        type: LoadBalancer
         ports:
           http:
-            enabled: false
-          mqtt:
-            enabled: true
             port: 1883
     persistence:
       config:
