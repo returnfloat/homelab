@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: docker.io/mpepping/cyberchef
-              tag: v10.9.0@sha256:bb237aa998a9fcce0aa1f2d4fb5edad48ee9c7d9799081d982670288ab66c985
+              tag: v10.10.0
             resources:
               requests:
                 cpu: 15m
