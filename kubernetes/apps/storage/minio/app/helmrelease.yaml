@@ -65,7 +65,7 @@ spec:
       accessModes: ["ReadWriteOnce"]
       size: 20Gi
     volumePermissions:
-      enabled: true
+      enabled: false
     metrics:
       serviceMonitor:
         enabled: true
