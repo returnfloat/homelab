@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: ghcr.io/paperless-ngx/paperless-ngx
-              tag: 2.7.0
+              tag: 2.7.2
             env:
               PAPERLESS_PORT: &port 80
               PAPERLESS_TIME_ZONE: "${TIMEZONE}"
@@ -81,7 +81,7 @@ spec:
           gotenburg:
             image:
               repository: thecodingmachine/gotenberg
-              tag: 8.3.0
+              tag: 8.4.0
             env:
               DISABLE_GOOGLE_CHROME: "1"
           tika:
