@@ -25,6 +25,7 @@ spec:
       id: 1
       name: home-kubernetes
     cni:
+      exclusive: false
       binPath: /var/lib/rancher/k3s/data/current/bin
       confPath: /var/lib/rancher/k3s/agent/etc/cni/net.d
     containerRuntime:

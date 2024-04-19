@@ -34,6 +34,7 @@ spec:
       id: 1
       name: home-kubernetes
     cni:
+      exclusive: false
       binPath: /var/lib/rancher/k3s/data/current/bin
       confPath: /var/lib/rancher/k3s/agent/etc/cni/net.d
     containerRuntime:
@@ -72,11 +73,7 @@ spec:
         ingress:
           enabled: true
           className: internal
-          hosts:
-            - "hubble.${SECRET_DOMAIN}"
-          tls:
-            - hosts:
-                - "hubble.${SECRET_DOMAIN}"
+          hosts: ["hubble.${SECRET_DOMAIN}"]
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: "${CLUSTER_CIDR}"
