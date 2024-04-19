@@ -33,7 +33,7 @@ spec:
           app:
             image:
               repository: jgraph/drawio
-              tag: 24.2.5
+              tag: 24.2.7
             env:
               LETS_ENCRYPT_ENABLED: "false"
               PUBLIC_DNS: "draw.akash.one"
