@@ -50,7 +50,7 @@ spec:
           app:
             image:
               repository: gristlabs/grist
-              tag: 1.1.12
+              tag: 1.1.13
             env:
               PORT: &port 8484
               HOME_PORT: "share"
