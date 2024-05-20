@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: flux-system
-      version: 14.3.4
+      version: 14.5.0
   interval: 30m0s
   maxHistory: 3
   install:
