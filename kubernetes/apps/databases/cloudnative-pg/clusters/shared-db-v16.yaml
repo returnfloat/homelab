@@ -60,21 +60,21 @@ spec:
   # ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
   # ##########################################################################################################
-  bootstrap:
-    # Use this to recover a net-new cluster from a backup
-    recovery:
-      source: &prevBucketFolder postgres-v16-0
-  externalClusters:
-    # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
-    - name: *prevBucketFolder
-      barmanObjectStore:
-        wal:
-          compression: *compr
-          maxParallel: 4
-        serverName: *prevBucketFolder
-        destinationPath: *dest
-        endpointURL: *minio
-        s3Credentials: *s3creds
+  # bootstrap:
+  #   # Use this to recover a net-new cluster from a backup
+  #   recovery:
+  #     source: &prevBucketFolder postgres-v16-0
+  # externalClusters:
+  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+  #   - name: *prevBucketFolder
+  #     barmanObjectStore:
+  #       wal:
+  #         compression: *compr
+  #         maxParallel: 4
+  #       serverName: *prevBucketFolder
+  #       destinationPath: *dest
+  #       endpointURL: *minio
+  #       s3Credentials: *s3creds
 
   # ##########################################################################################################
   # Bootstrap from an existing live cluster (same PostgreSQL major version)
