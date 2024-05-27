@@ -78,7 +78,7 @@ spec:
                 memory: 1G
     service:
       app:
-        controller: outline
+        controller: nocodb
         ports:
           http:
             port: *port
