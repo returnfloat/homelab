@@ -1,7 +1,6 @@
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
-namespace: monitoring
 metadata:
   name: &app grafana
   namespace: flux-system
