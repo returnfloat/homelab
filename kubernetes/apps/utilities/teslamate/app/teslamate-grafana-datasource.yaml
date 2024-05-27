@@ -5,7 +5,7 @@ metadata:
   name: teslamate-grafana-datasource
   labels:
     grafana_datasource: "true"
-    namespace: monitoring
+    namespace: observability
   namespace: utilities
 spec:
   secretStoreRef:
@@ -33,7 +33,7 @@ spec:
             secureJsonData:
               password: {{ .TESLAMATE_DATABASE_PASS }}
             jsonData:
-              postgresVersion: 1000
+              postgresVersion: 1500
               sslmode: disable
             version: 1
             editable: true
