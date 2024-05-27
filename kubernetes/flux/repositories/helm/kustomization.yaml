@@ -15,3 +15,18 @@ resources:
   - ./external-dns.yaml
   - ./ingress-nginx.yaml
   - ./k8s-gateway.yaml
+  ## User repos
+  - ./authentik.yaml
+  - ./backube.yaml
+  - ./bitnami.yaml
+  - ./cloudnative-pg.yaml
+  - ./coder-v2.yaml
+  - ./csi-driver-nfs.yaml
+  - ./external-secrets.yaml
+  - ./fairwinds.yaml
+  - ./grafana.yaml
+  - ./kubernetes-dashboard.yaml
+  - ./piraeus.yaml
+  - ./weave-gitops.yaml
+  - ./xenitab.yaml
+
