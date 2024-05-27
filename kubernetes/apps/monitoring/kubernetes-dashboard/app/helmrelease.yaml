@@ -3,6 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: kubernetes-dashboard
+  namespace: monitoring
 spec:
   interval: 30m
   chart:
@@ -27,11 +28,6 @@ spec:
       ingress:
         enabled: true
         ingressClassName: internal
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: kubernetes-dashboard.png
-          gethomepage.dev/name: Kubernetes Dashboard
-          gethomepage.dev/group: Observability
         hosts:
           - "kubernetes.${SECRET_DOMAIN}"
       # extraArgs:
