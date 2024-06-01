@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 ---
 # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-talosVersion: v1.7.2
+talosVersion: v1.7.4
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.30.1
 
@@ -36,9 +36,9 @@ nodes:
     #% if bootstrap_secureboot.enabled %#
     machineSpec:
       secureboot: true
-    talosImageURL: factory.talos.dev/installer-secureboot/#{ bootstrap_schematic_id }#
+    talosImageURL: factory.talos.dev/installer-secureboot/#{ item.schematic_id | default(bootstrap_schematic_id) }#
     #% else %#
-    talosImageURL: factory.talos.dev/installer/#{ bootstrap_schematic_id }#
+    talosImageURL: factory.talos.dev/installer/#{ item.schematic_id | default(bootstrap_schematic_id) }#
     #% endif %#
     controlPlane: #{ (item.controller) | string | lower }#
     networkInterfaces:
@@ -85,6 +85,30 @@ nodes:
     #% if bootstrap_user_patches %#
     patches:
       - "@./patches/node_#{ item.name }#.yaml"
+    #% endif %#
+    #% if item.manifests %#
+    extraManifests:
+      #% for manifest in item.manifests %#
+      - #{ manifest }#
+      #% endfor %#
+    #% endif %#
+    #% if item.extension_services %#
+    extensionServices:
+      #% for es in item.extension_services %#
+      - name: #{ es.name }#
+        configFiles:
+        #% for cf in es.configFiles %#
+          - content: |-
+              #{ cf.content | indent(14, yes) }#
+            mountPath: #{ cf.mountPath }#
+        #% endfor %#
+        #% if es.environment %#
+        environment:
+          #% for env in es.environment %#
+          - #{ env }#
+          #% endfor %#
+        #% endif %#
+      #% endfor %#
     #% endif %#
   #% endfor %#
 
