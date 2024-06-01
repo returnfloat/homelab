@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./prometheus-operator-crds/ks.yaml
-
