@@ -54,13 +54,14 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v1.105.1
+              tag: v1.106.2
             resources:
               requests:
-                cpu: 15m
-                memory: 256Mi
+                cpu: 25m
+                memory: 256M
               limits:
-                memory: 2Gi
+                cpu: 100m
+                memory: 512M
             envFrom:
               - secretRef:
                   name: *secret

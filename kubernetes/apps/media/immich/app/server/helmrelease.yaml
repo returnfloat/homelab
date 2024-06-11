@@ -59,16 +59,18 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.105.1
-            command: /bin/sh
-            args:
-              - ./start-server.sh
+              tag: v1.106.2
+            # command: /bin/sh
+            # args:
+            #   - ./start-server.sh
             resources:
               requests:
                 cpu: 100m
-                memory: 250Mi
+                memory: 256M
               limits:
-                memory: 1Gi
+                memory: 1G
+            env:
+              IMMICH_WORKERS_INCLUDE: 'api'
             envFrom:
               - secretRef:
                   name: *secret
