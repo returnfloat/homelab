@@ -9,5 +9,6 @@ resources:
   - ./nginx-static/ks.yaml
   # - ./paperless/ks.yaml
   - ./outline/ks.yaml
+  - ./vikunja/ks.yaml
   - ./drawio/ks.yaml
 
