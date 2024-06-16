@@ -95,7 +95,7 @@ spec:
           - path: /etc/caddy/Caddyfile
             subPath: Caddyfile
       vikunja-config:
-        type: configMap
+        type: secret
         name: vikunja-external-config
         globalMounts:
           - path: /etc/vikunja/config.yml
