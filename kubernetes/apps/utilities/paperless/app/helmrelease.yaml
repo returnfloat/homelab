@@ -52,6 +52,8 @@ spec:
               PAPERLESS_PORT: &port 80
               PAPERLESS_TIME_ZONE: "${TIMEZONE}"
               PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
+              USERMAP_UID: "1026"
+              USERMAP_GID: "100"
               PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_X_AUTHENTIK_USERNAME"
               PAPERLESS_URL: "https://paperless.${SECRET_DOMAIN}"
               PAPERLESS_THREADS_PER_WORKER: "1"
