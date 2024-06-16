@@ -90,13 +90,13 @@ spec:
     persistence:
       caddy-config:
         type: configMap
-        name: vikunja-configmap
+        name: vikunja-caddy-config
         globalMounts:
           - path: /etc/caddy/Caddyfile
             subPath: Caddyfile
       vikunja-config:
         type: configMap
-        name: vikunja-configmap
+        name: vikunja-external-config
         globalMounts:
           - path: /etc/vikunja/config.yml
             subPath: config.yaml

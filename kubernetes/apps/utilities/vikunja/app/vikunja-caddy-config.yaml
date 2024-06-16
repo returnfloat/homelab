@@ -2,13 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: vikunja-configmap
-  namespace: collaboration
+  name: vikunja-caddy-config
+  namespace: utilities
 data:
-  config.yaml: |
-    auth:
-      local:
-        enabled: true
   Caddyfile: |-
     {
       admin off

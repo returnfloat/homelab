@@ -1,0 +1,33 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: vikunja-external-config
+  namespace: utilities
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword-connect
+  refreshInterval: 30m
+  target:
+    creationPolicy: Owner
+    deletionPolicy: "Delete"
+    template:
+      engineVersion: v2
+      data:
+        config.yaml: |-
+          auth:
+            local:
+              enabled: true
+            openid:
+              enabled: true
+              providers:
+                - name: "Login via Authentik"
+                  authurl: https://auth.{{ .HOMELAB_SECRET_DOMAIN }}/application/o/vikunja/
+                  clientid: {{ .VIKUNJA_OIDC_CLIENT_ID }}
+                  clientsecret: {{ .VIKUNJA_CLIENT_SECRET }}
+  dataFrom:
+    - extract:
+        key: homelab-external-secret
+    - extract:
+        key: vikunja-external-secret

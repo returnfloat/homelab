@@ -4,5 +4,6 @@ kind: Kustomization
 namespace: utilities
 resources:
   - ./vikunja-external-secret.yaml
-  - ./vikunja-configmap.yaml
+  - ./vikunja-caddy-config.yaml
+  - ./vikunja-external-config.yaml
   - ./helmrelease.yaml
