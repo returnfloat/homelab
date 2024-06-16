@@ -52,11 +52,17 @@ spec:
               repository: vikunja/api
               tag: 0.22.1
               pullPolicy: IfNotPresent
-            env:
-              NODE_ENV: "production"
             envFrom:
               - secretRef:
                   name: vikunja-external-secret
+          frontend:
+            image:
+              repository: vikunja/frontend
+              tag: 0.22.1
+          proxy:
+            image:
+              repository: caddy
+              tag: 2.8.4-alpine
     service:
       app:
         controller: *app
