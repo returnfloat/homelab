@@ -55,6 +55,8 @@ spec:
             envFrom:
               - secretRef:
                   name: vikunja-external-secret
+            env:
+              VIKUNJA_SERVICE_TIMEZONE: "${TIMEZONE}"
           frontend:
             image:
               repository: vikunja/frontend
