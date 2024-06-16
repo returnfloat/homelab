@@ -54,6 +54,7 @@ spec:
               USERMAP_UID: "1026"
               USERMAP_GID: "100"
               PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: "HTTP_X_AUTHENTIK_USERNAME"
+              PAPERLESS_URL: "https://paperless.${SECRET_DOMAIN}"
               PAPERLESS_THREADS_PER_WORKER: "1"
               PAPERLESS_CONSUMER_POLLING: "120"
               PAPERLESS_CONSUMER_RECURSIVE: "true"
