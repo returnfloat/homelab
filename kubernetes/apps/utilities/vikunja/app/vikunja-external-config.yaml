@@ -18,11 +18,11 @@ spec:
         config.yaml: |-
           auth:
             local:
-              enabled: true
+              enabled: false
             openid:
               enabled: true
               providers:
-                - name: "Login via Authentik"
+                - name: "Authentik"
                   authurl: https://auth.{{ .HOMELAB_SECRET_DOMAIN }}/application/o/vikunja/
                   clientid: {{ .VIKUNJA_OIDC_CLIENT_ID }}
                   clientsecret: {{ .VIKUNJA_CLIENT_SECRET }}
