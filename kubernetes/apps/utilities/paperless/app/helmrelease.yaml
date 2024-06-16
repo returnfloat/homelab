@@ -49,7 +49,6 @@ spec:
               repository: ghcr.io/paperless-ngx/paperless-ngx
               tag: 2.9.0
             env:
-              PAPERLESS_PORT: &port 80
               PAPERLESS_TIME_ZONE: "${TIMEZONE}"
               PAPERLESS_ENABLE_HTTP_REMOTE_USER: "true"
               USERMAP_UID: "1026"
@@ -102,7 +101,7 @@ spec:
         controller: paperless
         ports:
           http:
-            port: *port
+            port: 8000
     ingress:
       app:
         enabled: true
