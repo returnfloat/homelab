@@ -57,6 +57,10 @@ spec:
                   name: vikunja-external-secret
             env:
               VIKUNJA_SERVICE_TIMEZONE: "${TIMEZONE}"
+              VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.${SECRET_DOMAIN}/"
+              VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
+              VIKUNJA_SERVICE_ENABLEUSERDELETION: "false"
+              VIKUNJA_LOG_LEVEL: "INFO"
           frontend:
             image:
               repository: vikunja/frontend
