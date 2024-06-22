@@ -57,6 +57,12 @@ configMapGenerator:
   - name: visited
     files:
       - visited.json=https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/visited.json
+  - name: charge-details
+    files:
+      - visited.json=https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/charge-details.json
+  - name: drive-details
+    files:
+      - visited.json=https://raw.githubusercontent.com/teslamate-org/teslamate/master/grafana/dashboards/internal/drive-details.json
 
 generatorOptions:
   disableNameSuffixHash: true
