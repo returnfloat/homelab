@@ -47,7 +47,7 @@ spec:
               - secretRef:
                   name: *secret
         containers:
-          appflowy_cloud:
+          appflowy-cloud:
             image:
               repository: appflowyinc/appflowy_cloud
               tag: 0.5.28
@@ -63,7 +63,7 @@ spec:
             envFrom:
               - secretRef:
                   name: *secret
-          admin_frontend:
+          admin-frontend:
             image:
               repository: appflowyinc/admin_frontend
               tag: 0.5.28
