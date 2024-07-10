@@ -71,14 +71,14 @@ spec:
             envFrom:
               - secretRef:
                   name: *secret
-          ai:
-            image:
-              repository: appflowyinc/appflowy_ai
-              tag: 0.5.13
-              pullPolicy: IfNotPresent
-            envFrom:
-              - secretRef:
-                  name: *secret
+          # ai:
+          #   image:
+          #     repository: appflowyinc/appflowy_ai
+          #     tag: 0.5.13
+          #     pullPolicy: IfNotPresent
+          #   envFrom:
+          #     - secretRef:
+          #         name: *secret
           nginx:
             image:
               repository: nginx
