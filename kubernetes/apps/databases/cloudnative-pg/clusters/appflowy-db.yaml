@@ -45,12 +45,12 @@ spec:
   # ##########################################################################################################
   # Bootstrap a brand new cluster with a new app database and owner.
   # ##########################################################################################################
-  bootstrap:
-    initdb:
-      database: appflowy
-      owner: appflowy
-      secret:
-        name: appflowy-db-external-secret
+  # bootstrap:
+  #   initdb:
+  #     database: appflowy
+  #     owner: appflowy
+  #     secret:
+  #       name: appflowy-db-external-secret
 
   ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
