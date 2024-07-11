@@ -56,8 +56,9 @@ spec:
               NODE_ENV: "production"
               FILE_STORAGE: "local"
               FILE_STORAGE_LOCAL_ROOT_DIR: "/var/lib/outline/data"
-              FILE_STORAGE_UPLOAD_MAX_SIZE: 26214400
-              FILE_STORAGE_IMPORT_MAX_SIZE: 5120000
+              FILE_STORAGE_UPLOAD_MAX_SIZE: 104857600
+              FILE_STORAGE_IMPORT_MAX_SIZE: 104857600
+              FILE_STORAGE_WORKSPACE_IMPORT_MAX_SIZE: 104857600
               LOG_LEVEL: "info"
               DEFAULT_LANGUAGE: "en_US"
               RATE_LIMITER_ENABLED: "true"
@@ -66,7 +67,6 @@ spec:
               WEB_CONCURRENCY: 1
               ENABLE_UPDATES: "false"
               PORT: &port 3000
-              # NODE_TLS_REJECT_UNAUTHORIZED: 0
             envFrom:
               - secretRef:
                   name: outline-external-secret
