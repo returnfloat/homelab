@@ -5,8 +5,8 @@ namespace: databases
 resources:
   - ./immich-db-external-secret.yaml
   - ./immich-db.yaml
-  - ./shared-db-external-secret.yaml
-  - ./shared-db-v16.yaml
+  # - ./shared-db-external-secret.yaml
+  # - ./shared-db-v16.yaml
   # - ./appflowy-db-external-secret.yaml
   # - ./appflowy-db.yaml
   - ./services.yaml
