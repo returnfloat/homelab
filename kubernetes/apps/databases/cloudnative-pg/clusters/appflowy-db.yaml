@@ -19,6 +19,13 @@ spec:
       timezone: "America/Los_Angeles"
     shared_preload_libraries:
       - "vectors.so"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      memory: "256Mi"
+      cpu: "100m"
   monitoring:
     enablePodMonitor: true
   backup:

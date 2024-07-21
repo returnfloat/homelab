@@ -69,13 +69,6 @@ spec:
               NC_DISABLE_ERR_REPORT: "true"
               NC_SECURE_ATTACHMENTS: "true"
               NC_AUTOMATION_LOG_LEVEL: "ERROR"
-            resources:
-              requests:
-                cpu: 50m
-                memory: 192M
-              limits:
-                cpu: 750m
-                memory: 1G
     service:
       app:
         controller: nocodb
