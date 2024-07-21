@@ -11,7 +11,7 @@ spec:
   enableSuperuserAccess: true
   storage:
     size: 20Gi
-    storageClass: nfs-csi
+    storageClass: openebs-hostpath
   superuserSecret:
     name: postgresql-superuser-secret
   postgresql:
@@ -59,9 +59,9 @@ spec:
   #   # Use this to recover a net-new cluster from a backup
   #   recovery:
   #     source: &prevBucketFolder appflowy-db-1
-  # #     # recoveryTarget:
-  # #       # Time base target for the recovery
-  # #       # targetTime: "2024-02-26 00:00:00.00000"
+  #     # recoveryTarget:
+  #     #   # Time base target for the recovery
+  #     #   # targetTime: "2024-02-26 00:00:00.00000"
   # externalClusters:
   #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
   #   - name: *prevBucketFolder
