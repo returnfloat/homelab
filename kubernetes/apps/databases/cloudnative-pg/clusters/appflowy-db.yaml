@@ -24,8 +24,8 @@ spec:
       cpu: "100m"
       memory: "256Mi"
     limits:
-      memory: "256Mi"
       cpu: "100m"
+      memory: "256Mi"
   monitoring:
     enablePodMonitor: true
   backup:

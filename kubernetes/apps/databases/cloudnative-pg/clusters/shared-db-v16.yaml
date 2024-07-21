@@ -21,10 +21,11 @@ spec:
       timezone: "America/Los_Angeles"
   resources:
     requests:
+      cpu: "250m"
       memory: "512Mi"
     limits:
-      memory: "1024Mi"
-      cpu: "1000m"
+      cpu: "250m"
+      memory: "512Mi"
   monitoring:
     enablePodMonitor: true
   backup:
