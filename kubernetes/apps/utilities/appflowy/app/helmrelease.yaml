@@ -66,7 +66,7 @@ spec:
           admin-frontend:
             image:
               repository: appflowyinc/admin_frontend
-              tag: 0.5.32
+              tag: 0.5.33
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
