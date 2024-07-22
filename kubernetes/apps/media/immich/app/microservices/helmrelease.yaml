@@ -52,16 +52,6 @@ spec:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v1.109.2
-            # command: /bin/sh
-            # args:
-            #   - ./start-microservices.sh
-            resources:
-              requests:
-                cpu: 100m
-                memory: 256M
-              limits:
-                cpu: 500m
-                memory: 1G
             env:
               IMMICH_WORKERS_EXCLUDE: 'api'
             envFrom:
