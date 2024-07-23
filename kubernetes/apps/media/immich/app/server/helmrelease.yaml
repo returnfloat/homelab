@@ -60,18 +60,15 @@ spec:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: v1.109.2
-            resources:
-              requests:
-                cpu: 100m
-                memory: 256M
-              limits:
-                cpu: 500m
-                memory: 1G
             env:
               IMMICH_WORKERS_INCLUDE: 'api'
             envFrom:
               - secretRef:
                   name: *secret
+            resources:
+              limits:
+                cpu: 250m
+                memory: 512M
     service:
       app:
         controller: immich-server

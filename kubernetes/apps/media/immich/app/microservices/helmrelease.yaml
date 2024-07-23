@@ -57,6 +57,10 @@ spec:
             envFrom:
               - secretRef:
                   name: *secret
+            resources:
+              limits:
+                cpu: 500m
+                memory: 1G
     persistence:
       library:
         enabled: true
