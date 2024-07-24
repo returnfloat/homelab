@@ -50,7 +50,7 @@ spec:
           appflowy-cloud:
             image:
               repository: appflowyinc/appflowy_cloud
-              tag: 0.5.33
+              tag: 0.5.35
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
