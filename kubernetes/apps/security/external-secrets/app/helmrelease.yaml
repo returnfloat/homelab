@@ -26,6 +26,8 @@ spec:
     keepHistory: false
   values:
     installCRDs: true
+    log:
+      level: info
     serviceMonitor:
       enabled: true
       interval: 1m
@@ -37,3 +39,10 @@ spec:
       serviceMonitor:
         enabled: true
         interval: 1m
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128M
+      limits:
+        cpu: 50m
+        memory: 128M

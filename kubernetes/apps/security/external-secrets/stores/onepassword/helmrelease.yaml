@@ -70,6 +70,13 @@ spec:
                   initialDelaySeconds: 15
               startup:
                 enabled: false
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64M
+              limits:
+                cpu: 50m
+                memory: 64M
           sync:
             image:
               repository: docker.io/1password/connect-sync
@@ -105,6 +112,13 @@ spec:
                   initialDelaySeconds: 15
               startup:
                 enabled: false
+            resources:
+              requests:
+                cpu: 50m
+                memory: 64M
+              limits:
+                cpu: 50m
+                memory: 64M
     service:
       app:
         controller: onepassword-connect

@@ -40,11 +40,8 @@ spec:
               repository: nginx
               tag: stable
             resources:
-              requests:
-                cpu: 15m
-                memory: 96M
               limits:
-                cpu: 50m
+                cpu: 100m
                 memory: 128M
     service:
       app:

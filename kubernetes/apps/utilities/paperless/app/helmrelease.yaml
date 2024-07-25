@@ -82,16 +82,28 @@ spec:
                 spec:
                   failureThreshold: 30
                   periodSeconds: 5
+            resources:
+              limits:
+                cpu: 250m
+                memory: 1G
           gotenburg:
             image:
               repository: thecodingmachine/gotenberg
               tag: 8.8.1
             env:
               DISABLE_GOOGLE_CHROME: "1"
+            resources:
+              limits:
+                cpu: 100m
+                memory: 128M
           tika:
             image:
               repository: ghcr.io/paperless-ngx/tika
               tag: 2.9.1-full
+            resources:
+              limits:
+                cpu: 100m
+                memory: 384M
     service:
       app:
         controller: paperless

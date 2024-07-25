@@ -70,6 +70,10 @@ spec:
             envFrom:
               - secretRef:
                   name: outline-external-secret
+            resources:
+              limits:
+                cpu: 250m
+                memory: 512M
     service:
       app:
         controller: outline
