@@ -59,6 +59,9 @@ spec:
               - secretRef:
                   name: *secret
             resources:
+              requests:
+                cpu: 50m
+                memory: 128M
               limits:
                 cpu: 500m
                 memory: 1G
