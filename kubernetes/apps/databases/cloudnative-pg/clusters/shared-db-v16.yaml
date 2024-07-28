@@ -19,13 +19,6 @@ spec:
       max_connections: "300"
       shared_buffers: "256MB"
       timezone: "America/Los_Angeles"
-  resources:
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
-    limits:
-      cpu: "250m"
-      memory: "512Mi"
   monitoring:
     enablePodMonitor: true
   backup:
