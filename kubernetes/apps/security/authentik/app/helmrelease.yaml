@@ -39,10 +39,6 @@ spec:
       envFrom:
         - secretRef:
             name: *secret
-      resources:
-        limits:
-          cpu: 250m
-          memory: 1G
     server:
       replicas: 1
       initContainers:
@@ -68,10 +64,6 @@ spec:
           - secretName: *host
             hosts:
               - *host
-      resources:
-        limits:
-          cpu: 250m
-          memory: 1G
     authentik:
       email:
         host: "smtp.gmail.com"
