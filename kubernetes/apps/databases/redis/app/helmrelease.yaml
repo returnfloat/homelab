@@ -43,33 +43,13 @@ spec:
       # disableCommands: ["FLUSHDB","FLUSHALL"]
       persistence:
         enabled: false
-      resources:
-        requests:
-          cpu: 100m
-          memory: 256M
-        limits:
-          cpu: 100m
-          memory: 256M
     replica:
       disableCommands: []
       # disableCommands: ["FLUSHDB","FLUSHALL"]
       persistence:
         enabled: false
-      resources:
-        requests:
-          cpu: 50m
-          memory: 64M
-        limits:
-          cpu: 250m
-          memory: 128M
     metrics:
       enabled: true
       serviceMonitor:
         enabled: true
-      resources:
-        requests:
-          cpu: 15m
-          memory: 64M
-        limits:
-          cpu: 150m
-          memory: 128M
+
