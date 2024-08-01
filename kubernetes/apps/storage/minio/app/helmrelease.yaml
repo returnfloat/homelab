@@ -77,7 +77,3 @@ spec:
       enabled: true
       runAsUser: 1026
       runAsNonRoot: true
-    resources:
-      limits:
-        cpu: 150m
-        memory: 512M
