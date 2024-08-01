@@ -50,7 +50,7 @@ spec:
           appflowy-cloud:
             image:
               repository: appflowyinc/appflowy_cloud
-              tag: 0.5.42
+              tag: 0.5.45
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
@@ -58,7 +58,7 @@ spec:
           gotrue:
             image:
               repository: appflowyinc/gotrue
-              tag: 0.5.43
+              tag: 0.5.45
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
@@ -66,7 +66,7 @@ spec:
           admin-frontend:
             image:
               repository: appflowyinc/admin_frontend
-              tag: 0.5.42
+              tag: 0.5.44
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
