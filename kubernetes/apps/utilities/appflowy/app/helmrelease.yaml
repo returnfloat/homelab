@@ -58,7 +58,7 @@ spec:
           gotrue:
             image:
               repository: appflowyinc/gotrue
-              tag: 0.5.45
+              tag: 0.5.49
               pullPolicy: IfNotPresent
             envFrom:
               - secretRef:
