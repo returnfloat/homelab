@@ -10,5 +10,4 @@ resources:
   - ./outline/ks.yaml
   - ./vikunja/ks.yaml
   - ./drawio/ks.yaml
-  # - ./appflowy/ks.yaml
 
