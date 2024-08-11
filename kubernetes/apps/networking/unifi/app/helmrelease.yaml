@@ -46,10 +46,6 @@ spec:
               JVM_INIT_HEAP_SIZE: null
               JVM_MAX_HEAP_SIZE: 1024M
               TZ: "${TIMEZONE}"
-            resources:
-              limits:
-                cpu: 500m
-                memory: 2Gi
     service:
       app:
         controller: unifi
