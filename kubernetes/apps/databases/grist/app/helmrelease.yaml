@@ -90,3 +90,9 @@ spec:
         globalMounts:
           - path: /persist
             readOnly: false
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1026
+        runAsGroup: 1026
+        seccompProfile: { type: RuntimeDefault }
