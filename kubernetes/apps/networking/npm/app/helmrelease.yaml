@@ -46,10 +46,6 @@ spec:
                 enabled: false
               startup:
                 enabled: false
-            resources:
-              limits:
-                cpu: 100m
-                memory: 256M
     service:
       app:
         controller: npm

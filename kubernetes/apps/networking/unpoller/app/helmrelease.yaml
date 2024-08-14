@@ -44,10 +44,6 @@ spec:
             envFrom:
               - secretRef:
                   name: *secret
-            resources:
-              limits:
-                cpu: 100m
-                memory: 128M
     service:
       app:
         controller: unpoller

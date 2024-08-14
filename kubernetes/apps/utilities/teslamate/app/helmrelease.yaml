@@ -55,10 +55,6 @@ spec:
             envFrom:
               - secretRef:
                   name: teslamate-external-secret
-            resources:
-              limits:
-                cpu: 100m
-                memory: 384M
     service:
       app:
         controller: teslamate

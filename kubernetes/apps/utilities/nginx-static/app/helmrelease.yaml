@@ -39,10 +39,6 @@ spec:
             image:
               repository: nginx
               tag: stable
-            resources:
-              limits:
-                cpu: 100m
-                memory: 128M
     service:
       app:
         controller: nginx-static

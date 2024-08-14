@@ -61,26 +61,14 @@ spec:
               VIKUNJA_SERVICE_ENABLEREGISTRATION: "false"
               VIKUNJA_SERVICE_ENABLEUSERDELETION: "false"
               VIKUNJA_LOG_LEVEL: "INFO"
-            resources:
-              limits:
-                cpu: 100m
-                memory: 128M
           frontend:
             image:
               repository: vikunja/frontend
               tag: 0.22.1
-            resources:
-              limits:
-                cpu: 50m
-                memory: 64M
           proxy:
             image:
               repository: caddy
               tag: 2.8.4-alpine
-            resources:
-              limits:
-                cpu: 50m
-                memory: 64M
     service:
       app:
         controller: *app
