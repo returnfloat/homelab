@@ -46,10 +46,6 @@ spec:
             envFrom:
               - secretRef:
                   name: pgadmin-external-secret
-            resources:
-              limits:
-                cpu: 100m
-                memory: 256M
     service:
       app:
         controller: pgadmin

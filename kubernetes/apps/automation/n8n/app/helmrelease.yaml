@@ -71,10 +71,6 @@ spec:
             envFrom:
               - secretRef:
                   name: *secret
-            resources:
-              limits:
-                cpu: 250m
-                memory: 512M
     service:
       app:
         controller: n8n

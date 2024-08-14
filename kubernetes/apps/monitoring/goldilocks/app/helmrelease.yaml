@@ -27,13 +27,6 @@ spec:
     - name: authentik
       namespace: security
   values:
-    controller:
-      resources:
-        requests:
-          cpu: 15m
-          memory: 64M
-        limits:
-          memory: 256M
     dashboard:
       replicaCount: 1
       ingress:
@@ -56,10 +49,4 @@ spec:
         tls:
           - hosts:
               - *host
-      resources:
-        requests:
-          cpu: 15m
-          memory: 64Mi
-        limits:
-          cpu: 100m
-          memory: 128M
+

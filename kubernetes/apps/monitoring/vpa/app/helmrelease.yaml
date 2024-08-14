@@ -26,12 +26,6 @@ spec:
   values:
     recommender:
       enabled: true
-      resources:
-        requests:
-          cpu: 10m
-          memory: 100M
-        limits:
-          memory: 200M
       extraArgs:
         storage: prometheus
         prometheus-address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
