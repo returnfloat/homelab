@@ -26,6 +26,8 @@ spec:
   dependsOn:
     - name: csi-driver-nfs
       namespace: storage
+    - name: minio
+      namespace: storage
   values:
     replicaCount: 1
     crds:
