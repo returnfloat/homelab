@@ -77,7 +77,7 @@ spec:
             enabled: true
             port: 1900
             protocol: UDP
-          # mobile throughput test
+          # UniFi mobile speed test
           mobile-test:
             enabled: true
             port: 6789
@@ -87,15 +87,36 @@ spec:
             enabled: true
             port: 5514
             protocol: UDP
-          # guest portal redirect ports
+          # HTTPS portal redirection
           guest-portal-https:
-            enabled: false
+            enabled: true
             port: 8843
             protocol: TCP
+          # HTTP portal redirection
           guest-portal-http:
-            enabled: false
+            enabled: true
             port: 8880
             protocol: TCP
+          # DNS TCP
+          dns-tcp:
+            enabled: true
+            port: 53
+            protocol: TCP
+          # DNS UDP
+          dns-udp:
+            enabled: true
+            port: 53
+            protocol: UDP
+          # NTP (date and time)
+          ntp-udp:
+            enabled: true
+            port: 123
+            protocol: UDP
+          # local-bound database communication
+          local-db:
+            enabled: true
+            port: 27117
+            protocol: UDP
     ingress:
       app:
         enabled: true
