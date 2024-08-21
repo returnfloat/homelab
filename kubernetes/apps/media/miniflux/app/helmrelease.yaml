@@ -46,8 +46,8 @@ spec:
               OAUTH2_USER_CREATION: 1
               METRICS_COLLECTOR: 1
               CLEANUP_FREQUENCY_HOURS: 6
-              CLEANUP_ARCHIVE_UNREAD_DAYS: 15
-              CLEANUP_ARCHIVE_READ_DAYS: 15
+              CLEANUP_ARCHIVE_UNREAD_DAYS: 30
+              CLEANUP_ARCHIVE_READ_DAYS: 30
               BASE_URL: "https://miniflux.${SECRET_DOMAIN}"
             envFrom:
               - secretRef:
