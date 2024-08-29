@@ -37,7 +37,7 @@ spec:
           app:
             image:
               repository: jacobalberty/unifi
-              tag: v8.3.32
+              tag: v8.4.59
             env:
               RUNAS_UID0: "false"
               UNIFI_UID: "999"
