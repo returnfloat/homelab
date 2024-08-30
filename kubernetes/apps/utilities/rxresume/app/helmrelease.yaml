@@ -54,12 +54,12 @@ spec:
               pullPolicy: IfNotPresent
             env:
               NODE_ENV: "production"
-              PORT: &port 3000
-              PUBLIC_URL: "https://rxresume.akash.one"
+              PORT: &port 3001
+              PUBLIC_URL: "https://rxresume.${SECRET_DOMAIN}"
               CHROME_URL: "ws://chrome:3000"
             envFrom:
               - secretRef:
-                  name: *secret
+                  name: rxresume-external-secret
           chrome:
             image:
               repository: ghcr.io/browserless/chromium
@@ -84,7 +84,7 @@ spec:
         enabled: true
         className: internal
         hosts:
-          - host: &host "rxresume.akash.one"
+          - host: &host "rxresume.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
