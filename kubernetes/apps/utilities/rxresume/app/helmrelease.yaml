@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.2.1/charts/library/common/values.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app rxresume
+  namespace: utilities
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.3.2
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: databases
+    - name: redis
+      namespace: databases
+    - name: onepassword-connect
+      namespace: security
+  values:
+    controllers:
+      rxresume:
+        strategy: RollingUpdate
+        annotations:
+          secret.reloader.stakater.com/reload: &secret rxresume-external-secret
+        initContainers:
+          01-initdb:
+            image:
+              repository: ghcr.io/onedr0p/postgres-init
+              tag: 16.3
+            envFrom:
+              - secretRef:
+                  name: *secret
+        containers:
+          app:
+            image:
+              repository: amruthpillai/reactive-resume
+              tag: v4.1.8
+              pullPolicy: IfNotPresent
+            env:
+              NODE_ENV: "production"
+              PORT: &port 3000
+              PUBLIC_URL: "https://rxresume.akash.one"
+              CHROME_URL: "ws://chrome:3000"
+            envFrom:
+              - secretRef:
+                  name: *secret
+          chrome:
+            image:
+              repository: ghcr.io/browserless/chromium
+              tag: latest
+              pullPolicy: IfNotPresent
+            env:
+              TIMEOUT: 10000
+              CONCURRENT: 10
+              EXIT_ON_HEALTH_FAILURE: true
+              PRE_REQUEST_HEALTH_CHECK: true
+            envFrom:
+              - secretRef:
+                  name: rxresume-external-secret
+    service:
+      app:
+        controller: rxresume
+        ports:
+          http:
+            port: *port
+    ingress:
+      app:
+        enabled: true
+        className: internal
+        hosts:
+          - host: &host "rxresume.akash.one"
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+

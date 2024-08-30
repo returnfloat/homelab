@@ -10,3 +10,4 @@ resources:
   - ./outline/ks.yaml
   - ./vikunja/ks.yaml
   - ./drawio/ks.yaml
+  - ./rxresume/ks.yaml
