@@ -66,7 +66,7 @@ spec:
               tag: latest
               pullPolicy: IfNotPresent
             env:
-              TIMEOUT: 10000
+              TIMEOUT: 60000
               CONCURRENT: 10
               EXIT_ON_HEALTH_FAILURE: true
               PRE_REQUEST_HEALTH_CHECK: true
