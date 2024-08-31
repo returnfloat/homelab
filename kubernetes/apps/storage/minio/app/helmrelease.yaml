@@ -55,7 +55,9 @@ spec:
       tls: true
     apiIngress:
       enabled: true
-      ingressClassName: internal
+      ingressClassName: external
+      annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
       hostname: "minio.${SECRET_DOMAIN}"
       tls: true
     persistence:
