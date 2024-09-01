@@ -85,22 +85,26 @@ spec:
         existingClaim: calibre-nfs
         globalMounts:
           - path: /config
+            subPath: /config
             readOnly: false
       cwa-book-ingest:
         enabled: true
         existingClaim: calibre-nfs
         globalMounts:
           - path: /cwa-book-ingest
+            subPath: /cwa-book-ingest
             readOnly: false
       library:
         enabled: true
         existingClaim: calibre-nfs
         globalMounts:
           - path: /calibre-library
+            subPath: /calibre-library
             readOnly: false
       books:
         enabled: true
         existingClaim: calibre-nfs
         globalMounts:
           - path: /books
+            subPath: /calibre-library
             readOnly: false
