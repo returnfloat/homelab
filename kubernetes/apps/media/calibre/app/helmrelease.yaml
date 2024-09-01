@@ -99,7 +99,7 @@ spec:
         existingClaim: calibre-nfs
         globalMounts:
           - path: /calibre-library
-            subPath: ./calibre-library/
+            subPath: ./library/
             readOnly: false
       books:
         enabled: true
