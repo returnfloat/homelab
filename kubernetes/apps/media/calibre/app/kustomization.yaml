@@ -4,5 +4,4 @@ kind: Kustomization
 namespace: media
 resources:
   - calibre-external-secret.yaml
-  - calibre-nfs-pvc.yaml
   - helmrelease.yaml
