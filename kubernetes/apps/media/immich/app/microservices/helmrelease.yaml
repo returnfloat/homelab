@@ -52,7 +52,7 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.114.0
+              tag: v1.115.0
             env:
               IMMICH_WORKERS_EXCLUDE: 'api'
             envFrom:
