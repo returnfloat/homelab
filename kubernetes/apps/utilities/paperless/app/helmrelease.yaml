@@ -86,7 +86,7 @@ spec:
           gotenburg:
             image:
               repository: thecodingmachine/gotenberg
-              tag: 8.9.2
+              tag: 8.10.0
             env:
               DISABLE_GOOGLE_CHROME: "1"
           tika:
