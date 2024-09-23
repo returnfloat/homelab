@@ -26,6 +26,7 @@ resources:
   - ./fairwinds.yaml
   - ./grafana.yaml
   - ./kubernetes-dashboard.yaml
+  - ./open-webui.yaml
   - ./piraeus.yaml
   - ./weave-gitops.yaml
   - ./xenitab.yaml

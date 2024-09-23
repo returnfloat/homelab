@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.4.0/charts/library/common/values.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app openwebui
+  namespace: automation
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: open-webui
+      version: 3.1.18
+      sourceRef:
+        kind: HelmRepository
+        name: open-webui
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: onepassword-connect
+      namespace: security
+  values:
+    annotations:
+      secret.reloader.stakater.com/reload: &secret openwebui-external-secret
+    ollama:
+      enabled: false
+    pipelines:
+      enabled: false
+    ingress:
+      enabled: true
+      class: "internal"
+      host: "openwebui.${SECRET_DOMAIN}"
+      tls: true
+    persistence:
+      enabled: true
+      size: 10Gi
+      accessModes:
+        - ReadWriteOnce
+      storageClass: "nfs-csi"
+    extraEnvVars:
+      - name: OPENAI_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: openwebui-external-secret
+            key: OPENAI_API_KEY
+      - name: ENABLE_OAUTH_SIGNUP
+        value: "True"
+      - name: OAUTH_PROVIDER_NAME
+        value: "Authentik"
+      - name: OPENID_PROVIDER_URL
+        value: "https://auth.${SECRET_DOMAIN}/application/o/openwebui/.well-known/openid-configuration"
+      - name: OPENID_REDIRECT_URI
+        value: "https://openwebui.${SECRET_DOMAIN}/oauth/oidc/callback"
+      - name: OAUTH_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: openwebui-external-secret
+            key: OAUTH_CLIENT_ID
+      - name: OAUTH_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: openwebui-external-secret
+            key: OAUTH_CLIENT_SECRET
