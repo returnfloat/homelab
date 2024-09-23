@@ -52,6 +52,8 @@ spec:
           secretKeyRef:
             name: openwebui-external-secret
             key: OPENAI_API_KEY
+      - name: ENABLE_LOGIN_FORM
+        value: "False"
       - name: ENABLE_OAUTH_SIGNUP
         value: "True"
       - name: OAUTH_PROVIDER_NAME
