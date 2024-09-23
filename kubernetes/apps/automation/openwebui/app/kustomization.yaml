@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: automation
 resources:
   - ./helmrelease.yaml
-  - ./chatgpt-next-web-external-secret.yaml
+  - ./openwebui-external-secret.yaml
