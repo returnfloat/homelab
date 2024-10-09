@@ -33,7 +33,7 @@ spec:
   values:
     image:
       repository: bitnami/minio
-      tag: 2024.9.22
+      tag: 2024.10.2
       pullPolicy: IfNotPresent
     podAnnotations:
       secret.reloader.stakater.com/reload: "minio-external-secret"
