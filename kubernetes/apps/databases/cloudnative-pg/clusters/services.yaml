@@ -6,7 +6,7 @@ metadata:
   namespace: databases
   annotations:
     external-dns.alpha.kubernetes.io/hostname: postgresql-v16.${SECRET_DOMAIN}
-    io.cilium/lb-ipam-ips: "${LB_CNPG_V16_ADDRESS}"
+    lbipam.cilium.io/ips: "${LB_CNPG_V16_ADDRESS}"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
@@ -27,7 +27,7 @@ metadata:
   namespace: databases
   annotations:
     external-dns.alpha.kubernetes.io/hostname: immich-db.${SECRET_DOMAIN}
-    io.cilium/lb-ipam-ips: "${LB_IMMICH_DB_ADDRESS}"
+    lbipam.cilium.io/ips: "${LB_IMMICH_DB_ADDRESS}"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster

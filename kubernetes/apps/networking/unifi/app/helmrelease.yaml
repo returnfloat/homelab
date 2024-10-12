@@ -52,7 +52,7 @@ spec:
         type: LoadBalancer
         externalTrafficPolicy: Cluster
         annotations:
-          io.cilium/lb-ipam-ips: "${LB_UNIFI_ADDRESS}"
+          lbipam.cilium.io/ips: "${LB_UNIFI_ADDRESS}"
         ports:
           # Web admin
           http:

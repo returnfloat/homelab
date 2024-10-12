@@ -58,7 +58,7 @@ spec:
         controller: npm
         externalTrafficPolicy: Cluster
         annotations:
-          io.cilium/lb-ipam-ips: "${LB_NPM_ADDRESS}"
+          lbipam.cilium.io/ips: "${LB_NPM_ADDRESS}"
         ports:
           http:
             enabled: true
