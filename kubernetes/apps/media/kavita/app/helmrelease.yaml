@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: linuxserver/kavita
-              tag: 0.8.3
+              tag: version-v0.8.3.2
             env:
               TZ: "${TIMEZONE}"
               PUID: 1026
