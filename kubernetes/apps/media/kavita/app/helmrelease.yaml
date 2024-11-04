@@ -31,8 +31,6 @@ spec:
     - name: onepassword-connect
       namespace: security
   values:
-    # annotations:
-    #   secret.reloader.stakater.com/reload: &secret kavita-external-secret
     controllers:
       kavita:
         strategy: RollingUpdate
@@ -45,9 +43,6 @@ spec:
               TZ: "${TIMEZONE}"
               PUID: 1026
               PGID: 100
-            # envFrom:
-            #   - secretRef:
-            #       name: *secret
     service:
       app:
         controller: kavita
