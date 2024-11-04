@@ -61,10 +61,10 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 128M
+                memory: 256M
               limits:
-                cpu: 500m
-                memory: 1G
+                cpu: 1000m
+                memory: 2G
     service:
       app:
         controller: immich-machine-learning
