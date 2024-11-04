@@ -48,29 +48,12 @@ spec:
               STASH_METADATA: "/root/.stash/stash-data/metadata"
               STASH_BLOBS: "/root/.stash/stash-data/blobs"
               STASH_CACHE: "/cache"
-          stash-vr-companion:
-            image:
-              repository: ghcr.io/tweeticoats/stash-vr-companion
-              tag: latest
-            env:
-              API_URL: "http://localhost:9999/graphql"
-              CACHE_DIR: "/cache"
-              HSP_DIR: "/data/hsp"
-              DISABLE_CERT_VERIFICATION: false
-            envFrom:
-              - secretRef:
-                  name: stash-external-secret
     service:
       app:
         controller: stash
         ports:
           http:
             port: *port
-      vr:
-        controller: stash
-        ports:
-          http:
-            port: 5000
     ingress:
       app:
         enabled: true
@@ -83,17 +66,9 @@ spec:
               service:
                   identifier: app
                   port: http
-          - host: &hostvr "stash-vr.${SECRET_DOMAIN}"
-            paths:
-            - path: /
-              pathType: Prefix
-              service:
-                  identifier: vr
-                  port: http
         tls:
           - hosts:
               - *host
-              - *hostvr
     persistence:
       data:
         enabled: true
