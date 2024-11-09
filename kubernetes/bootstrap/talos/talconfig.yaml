@@ -7,13 +7,15 @@ kubernetesVersion: v1.31.2
 
 clusterName: "home-kubernetes"
 endpoint: https://192.168.90.2:6443
+
 clusterPodNets:
   - "10.69.0.0/16"
 clusterSvcNets:
   - "10.96.0.0/16"
+
 additionalApiServerCertSans: &sans
   - "192.168.90.2"
-  - 127.0.0.1 # KubePrism
+  - "127.0.0.1"
 additionalMachineCertSans: *sans
 
 # Disable built-in Flannel to use Cilium
