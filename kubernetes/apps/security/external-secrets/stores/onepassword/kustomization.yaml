@@ -4,5 +4,5 @@ kind: Kustomization
 namespace: security
 resources:
   - ./onepassword-secret.sops.yaml
-  - ./helmrelease.yaml
   - ./clustersecretstore.yaml
+  - ./helmrelease.yaml
