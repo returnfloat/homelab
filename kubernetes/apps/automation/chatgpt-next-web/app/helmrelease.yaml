@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: yidadaa/chatgpt-next-web
-              tag: v2.15.7
+              tag: v2.15.8
             envFrom:
               - secretRef:
                   name: *secret
