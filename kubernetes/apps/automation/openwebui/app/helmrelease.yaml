@@ -71,3 +71,8 @@ spec:
           secretKeyRef:
             name: openwebui-external-secret
             key: OAUTH_CLIENT_SECRET
+      - name: WEBUI_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: openwebui-external-secret
+            key: WEBUI_SECRET_KEY
