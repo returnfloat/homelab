@@ -6,4 +6,5 @@ resources:
   - ./n8n/ks.yaml
   # - ./chatgpt-next-web/ks.yaml
   - ./openwebui/ks.yaml
+  - ./node-red/ks.yaml
 
