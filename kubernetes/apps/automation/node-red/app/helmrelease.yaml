@@ -34,7 +34,7 @@ spec:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: &secret node-red-external-secret
-          configmap.reloader.stakater.com/reload: node-red-configmap
+          # configmap.reloader.stakater.com/reload: node-red-configmap
         containers:
           app:
             image:
@@ -77,13 +77,13 @@ spec:
         globalMounts:
           - path: /data
             readOnly: false
-      settings:
-        type: configMap
-        name: node-red-configmap
-        globalMounts:
-          - path: /data/settings.js
-            subPath: settings.js
-            readOnly: true
+      # settings:
+      #   type: configMap
+      #   name: node-red-configmap
+      #   globalMounts:
+      #     - path: /data/settings.js
+      #       subPath: settings.js
+      #       readOnly: true
       tmp:
         type: emptyDir
     defaultPodOptions:
