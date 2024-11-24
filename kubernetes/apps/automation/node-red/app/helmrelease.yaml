@@ -37,8 +37,8 @@ spec:
         containers:
           app:
             image:
-              repository: node-redio/node-red
-              tag: 1.69.0
+              repository: nodered/node-red
+              tag: 4.0.5
             env:
               TZ: "${TIMEZONE}"
             envFrom:
