@@ -11,3 +11,4 @@ resources:
   - ./vikunja/ks.yaml
   - ./drawio/ks.yaml
   - ./rxresume/ks.yaml
+  - ./hoarder/ks.yaml
