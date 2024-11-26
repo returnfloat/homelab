@@ -3,5 +3,13 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: automation
 resources:
-  - ./helmrelease.yaml
   - ./windmill-external-secret.yaml
+  - ./helmrelease.yaml
+configMapGenerator:
+  - name: windmill-grants
+    files:
+      - ./scripts/grants.sh
+generatorOptions:
+  disableNameSuffixHash: true
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
