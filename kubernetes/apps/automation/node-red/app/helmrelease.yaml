@@ -28,6 +28,8 @@ spec:
   dependsOn:
     - name: csi-driver-nfs
       namespace: storage
+    - name: onepassword-connect
+      namespace: security
   values:
     controllers:
       node-red:

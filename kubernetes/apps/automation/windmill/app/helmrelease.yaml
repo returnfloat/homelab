@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app windmill
+  namespace: automation
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: windmill
+      version: 2.0.322
+      sourceRef:
+        kind: HelmRepository
+        name: windmill
+        namespace: flux-system
+      interval: 15m
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: databases
+    - name: onepassword-connect
+      namespace: security
+  values:
+    windmill:
+      app:
+        annotations:
+          secret.reloader.stakater.com/reload: &secret windmill-external-secret
+        initContainers:
+          - name: init-db
+            image: ghcr.io/onedr0p/postgres-init:16.3
+            envFrom:
+              - secretRef:
+                  name: *secret
+          - name: init-grants
+            image: ghcr.io/onedr0p/postgres-init:16.3
+            command:
+              - /bin/bash
+              - -c
+              - |
+                #!/bin/bash
+
+                set -o errexit
+                set -o nounset
+
+                /var/run/grants.sh
+            envFrom:
+              - secretRef:
+                  name: *secret
+            volumeMounts:
+              - name: grants
+                readOnly: true
+                subPath: grants.sh
+                mountPath: /var/run/grants.sh
+        volumes:
+          - name: grants
+            configMap:
+              name: windmill-grants
+              defaultMode: 509
+      baseDomain: &host "windmill.${SECRET_DOMAIN}"
+      baseProtocol: https
+      appReplicas: 1
+      lspReplicas: 1
+      multiplayerReplicas: 1
+      workerGroups:
+        - name: default
+          replicas: 2
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+        - name: native
+          replicas: 1
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+        - name: "gpu"
+          replicas: 0
+    ingress:
+      enabled: true
+      # annotations:
+      #   external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+      className: internal
+      tls:
+        - hosts:
+            - *host
+    postgresql:
+      enabled: false
+    minio:
+      enabled: false
+    enterprise:
+      # -- enable windmill enterprise, requires license key.
+      enabled: false
+  valuesFrom:
+    - kind: Secret
+      name: *secret
+      valuesKey: WINDMILL_POSTGRES_URL
+      targetPath: windmill.databaseUrl

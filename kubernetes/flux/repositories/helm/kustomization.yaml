@@ -29,4 +29,5 @@ resources:
   - ./piraeus.yaml
   - ./weave-gitops.yaml
   - ./xenitab.yaml
+  - ./windmill.yaml
 

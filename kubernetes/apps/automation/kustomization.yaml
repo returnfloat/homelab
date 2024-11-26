@@ -6,4 +6,5 @@ resources:
   - ./n8n/ks.yaml
   - ./openwebui/ks.yaml
   - ./node-red/ks.yaml
+  - ./windmill/ks.yaml
 
