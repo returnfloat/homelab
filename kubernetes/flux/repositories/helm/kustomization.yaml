@@ -23,7 +23,6 @@ resources:
   - ./coder-v2.yaml
   - ./csi-driver-nfs.yaml
   - ./external-secrets.yaml
-  - ./fairwinds.yaml
   - ./grafana.yaml
   - ./kubernetes-dashboard.yaml
   - ./open-webui.yaml
