@@ -41,7 +41,7 @@ spec:
           app:
             image:
               repository: nodered/node-red
-              tag: 4.0.7
+              tag: 4.0.8
             env:
               TZ: "${TIMEZONE}"
             envFrom:
