@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: miniflux/miniflux
-              tag: 2.2.3
+              tag: 2.2.4
             env:
               RUN_MIGRATIONS: 1
               CREATE_ADMIN: 1
