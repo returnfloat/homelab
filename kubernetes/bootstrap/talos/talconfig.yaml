@@ -77,7 +77,6 @@ nodes:
 
 # Global patches
 patches:
-  - "@./patches/global/cluster-discovery.yaml"
   - "@./patches/global/containerd.yaml"
   - "@./patches/global/disable-search-domain.yaml"
   - "@./patches/global/dns.yaml"
