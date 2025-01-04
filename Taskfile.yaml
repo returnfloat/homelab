@@ -31,7 +31,7 @@ tasks:
 
   init:
     desc: Initialize configuration files
-    cmd: cp {{.BOOTSTRAP_CONFIG_FILE | replace ".yaml" ".sample.yaml"}} {{.BOOTSTRAP_CONFIG_FILE}}
+    cmd: mv {{.BOOTSTRAP_CONFIG_FILE | replace ".yaml" ".sample.yaml"}} {{.BOOTSTRAP_CONFIG_FILE}}
     status:
       - test -f {{.BOOTSTRAP_CONFIG_FILE}}
 
@@ -42,10 +42,7 @@ tasks:
       - task: bootstrap:template
       - task: bootstrap:secrets
       - task: kubernetes:kubeconform
-      - >
-        {{if eq .HOME_SOPS_AGE_KEY_FILE_EXISTS "true"}}
-        echo "WARNING: SOPS Age key found in home directory, this may cause conflicts."
-        {{end}}
+      - '{{if eq .HOME_SOPS_AGE_KEY_FILE_EXISTS "true"}}echo "WARNING: SOPS Age key found in home directory, this may cause conflicts."{{end}}'
     vars:
       HOME_SOPS_AGE_KEY_FILE_EXISTS:
         sh: test -f ~/.config/sops/age/keys.txt && echo true || echo false
