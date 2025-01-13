@@ -27,7 +27,7 @@ The features included will depend on the type of configuration you want to use. 
 
 ## 🚀 Let's Go!
 
-There are **6 stages** outlined below for completing this project, make sure you follow the stages in order.
+There are **4 stages** outlined below for completing this project, make sure you follow the stages in order.
 
 ### Stage 1: Machine Preparation
 
@@ -46,7 +46,7 @@ There are **6 stages** outlined below for completing this project, make sure you
 
 1. Head over to the [Talos Linux Image Factory](https://factory.talos.dev) and follow the instructions. Be sure to only choose the **bare-minimum system extensions** as some might require additional configuration and prevent Talos from booting without it. You can always add system extensions after Talos is installed and working.
 
-2. This will eventually lead you to download a Talos Linux ISO file (or for SBCs the RAW file). Make sure to note the schematic ID you will need this later on.
+2. This will eventually lead you to download a Talos Linux ISO file (or for SBCs the RAW file). Make sure to note the **schematic ID** you will need this later on.
 
 3. Flash the Talos ISO or RAW file to a USB drive and boot from it on your nodes.
 
@@ -58,7 +58,7 @@ There are **6 stages** outlined below for completing this project, make sure you
 
 3. **Install** and **activate** [mise](https://mise.jdx.dev/) following the instructions for your workstation [here](https://mise.jdx.dev/getting-started.html).
 
-4. Use `mise` to install the **required** CLI tools.
+4. Use `mise` to install the **required** CLI tools:
 
    📍 _If `mise` is having trouble compiling Python, try running `mise settings python.compile=0` and try these commands again_
 
@@ -73,7 +73,7 @@ There are **6 stages** outlined below for completing this project, make sure you
 > [!IMPORTANT]
 > The [config.sample.yaml](./config.sample.yaml) file contains config that are **vital** to the template process.
 
-1. Generate the `config.yaml` from the [config.sample.yaml](./config.sample.yaml) configuration file.
+1. Generate the `config.yaml` from the [config.sample.yaml](./config.sample.yaml) configuration file:
 
    📍 _If the below command fails `mise` is either not install or configured incorrectly._
 
@@ -83,95 +83,53 @@ There are **6 stages** outlined below for completing this project, make sure you
 
 2. Fill out the `config.yaml` configuration file using the comments in that file as a guide.
 
-3. Run the following command which will generate all the files needed to continue.
+3. Template out all the configuration files:
 
     ```sh
     task configure
     ```
 
-4. Push you changes to git
+4. Push your changes to git:
 
    📍 _**Verify** all the `./kubernetes/**/*.sops.*` files are **encrypted** with SOPS_
 
     ```sh
     git add -A
-    git commit -m "Initial commit :rocket:"
+    git commit -m "chore: initial commit :rocket:"
     git push
     ```
 
-### Stage 4: Bootstrap Talos & Kubernetes
+### Stage 4: Bootstrap Talos, Kubernetes, and Flux
 
-> [!IMPORTANT]
-> After running either of the next two commands it might take a while for the cluster to be setup (10+ minutes is normal). During which time you will see a variety of error messages like: "couldn't get current server API group list," "error: no matching resources found", etc. **This is a normal.** If this step gets interrupted, e.g. by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>, you likely will need to [reset the cluster](#-reset) before trying again.
+1. Install Talos:
 
-1. Install Talos. This generates secrets, generates the Talos config files for your nodes and applies them to the nodes. After it has completed a `kubeconfig` will be placed in the root of your repository.
+   📍 _It might take a while for the cluster to be setup (10+ minutes is normal). During which time you will see a variety of error messages like: "couldn't get current server API group list," "error: no matching resources found", etc. **This is a normal.** If this step gets interrupted, e.g. by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>, you likely will need to [reset the cluster](#-reset) before trying again_
 
     ```sh
     task bootstrap:talos
     ```
 
-2. Install the essential cluster applications. This command will install the apps from the [helmfile](./templates/config/kubernetes/bootstrap/helmfile.yaml.j2) configuration file into your cluster.
+2. Push your changes to git:
+
+    ```sh
+    git add -A
+    git commit -m "chore: add talhelper encrypted secret :lock:"
+    git push
+    ```
+
+3. Install cilium, coredns, spegel, flux and sync the cluster to the repository state:
 
     ```sh
     task bootstrap:apps
     ```
 
-3. Verify the nodes are online
+4. Watch the rollout of your cluster happen:
+
+   📍 _Depending on the features you choose a successful rollout will include pods being deployed into the **cert-manager, flux-system, network and openebs-system** namespaces_
 
     ```sh
-    kubectl get nodes -o wide
-    # NAME           STATUS   ROLES                       AGE     VERSION
-    # k8s-0          Ready    control-plane,etcd,master   1h      v1.30.1
-    # k8s-1          Ready    worker                      1h      v1.30.1
+    watch kubectl get pods --all-namespaces
     ```
-
-### Stage 5: Bootstrap Flux
-
-1. Verify Flux can be installed
-
-    ```sh
-    flux check --pre
-    # ► checking prerequisites
-    # ✔ kubectl 1.30.1 >=1.18.0-0
-    # ✔ Kubernetes 1.30.1 >=1.16.0-0
-    # ✔ prerequisites checks passed
-    ```
-
-2. Install Flux and sync the cluster to the Git repository
-
-    ```sh
-    task bootstrap:flux
-    # namespace/flux-system configured
-    # customresourcedefinition.apiextensions.k8s.io/alerts.notification.toolkit.fluxcd.io created
-    # ...
-    ```
-
-3. Verify Flux components are running in the cluster
-
-    ```sh
-    kubectl -n flux-system get pods -o wide
-    # NAME                                       READY   STATUS    RESTARTS   AGE
-    # helm-controller-5bbd94c75-89sb4            1/1     Running   0          1h
-    # kustomize-controller-7b67b6b77d-nqc67      1/1     Running   0          1h
-    # notification-controller-7c46575844-k4bvr   1/1     Running   0          1h
-    # source-controller-7d6875bcb4-zqw9f         1/1     Running   0          1h
-    ```
-
-### Stage 6: Cluster Verification
-
-_Mic check, 1, 2_ - In a few moments applications should be lighting up like Christmas in July 🎄
-
-1. View common resources in your cluster.
-
-    ```sh
-    task kubernetes:resources
-    ```
-
-2. ⚠️ It might take `cert-manager` awhile to generate certificates, this is normal so be patient.
-
-3. 🏆 **Congratulations** if all goes smooth you will have a Kubernetes cluster managed by Flux and your Git repository is driving the state of your cluster.
-
-4. 🧠 Now it's time to pause and go get some motel motor oil ☕ and admire you made it this far!
 
 ## 📣 Flux w/ Cloudflare post installation
 
@@ -202,7 +160,7 @@ By default Flux will periodically check your git repository for changes. In orde
 > [!IMPORTANT]
 > This will only work after you have switched over certificates to the Let's Encrypt Production servers.
 
-1. Obtain the webhook path
+1. Obtain the webhook path:
 
     📍 _Hook id and path should look like `/hook/12ebd1e363c641dc3c2e430ecf3cee2b3c7a5ac9e1234506f6f5f3ce1230e123`_
 
@@ -210,13 +168,13 @@ By default Flux will periodically check your git repository for changes. In orde
     kubectl -n flux-system get receiver github-receiver -o jsonpath='{.status.webhookPath}'
     ```
 
-2. Piece together the full URL with the webhook path appended
+2. Piece together the full URL with the webhook path appended:
 
     ```text
     https://flux-webhook.${cloudflare.domain}/hook/12ebd1e363c641dc3c2e430ecf3cee2b3c7a5ac9e1234506f6f5f3ce1230e123
     ```
 
-3. Navigate to the settings of your repository on Github, under "Settings/Webhooks" press the "Add webhook" button. Fill in the webhook URL and your `github_webhook_token` secret in `config.yaml`, Content type: `application/json`, Events: Choose Just the push event, and save.
+3. Navigate to the settings of your repository on Github, under "Settings/Webhooks" press the "Add webhook" button. Fill in the webhook URL and your `${github.webhook_token}` secret in `config.yaml`, Content type: `application/json`, Events: Choose Just the push event, and save.
 
 ## 💥 Reset
 
@@ -262,9 +220,19 @@ task talos:upgrade-k8s
 
 After you have successfully bootstrapped Talos, Kubernetes and Flux it might be a good idea to clean up the repository and remove the [templates](./templates) directory and any files related to the templating process. This will also remove most of the cruft brought in from the upstream template repo.
 
-```sh
-task template:cleanup
-```
+1. Tidy up your repository:
+
+    ```sh
+    task template:tidy
+    ```
+
+2. Push your changes to git:
+
+    ```sh
+    git add -A
+    git commit -m "chore: tidy up :broom:"
+    git push
+    ```
 
 ## 🤖 Renovate
 

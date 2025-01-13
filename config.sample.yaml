@@ -1,14 +1,8 @@
 ---
 
 #
-# 1. (REQUIRED) Cluster details - Cluster represents the Kubernetes cluster layer and any additional customizations
+# (REQUIRED) Cluster details - Cluster represents the Kubernetes cluster layer and any additional customizations
 #
-
-# (REQUIRED) Cluster name; affects Cilium and Talos
-cluster_name: "home-kubernetes"
-
-# (REQUIRED) Generated schematic id from https://factory.talos.dev/
-schematic_id: ""
 
 # (REQUIRED) The network (in CIDR notation) your nodes are on (e.g. 192.168.1.0/24)
 node_network: ""
@@ -21,40 +15,28 @@ node_inventory: []
   #   controller: true    # (REQUIRED) Set to true if this is a controller node
   #   disk: ""            # (REQUIRED) Device path or serial number of the disk for this node (talosctl disks -n <ip> --insecure)
   #   mac_addr: ""        # (REQUIRED) MAC address of the NIC for this node, must be lowercase (talosctl get links -n <ip> --insecure)
-  #   schematic_id: ""    # (OPTIONAL) Override the 'schematic_id' with a node specific schematic ID from https://factory.talos.dev/
+  #   schematic_id: ""    # (REQUIRED) Schematic ID from https://factory.talos.dev/
   #   mtu: ""             # (OPTIONAL) MTU for the NIC. DEFAULT: 1500
-  #   manifests:          # (OPTIONAL) Additional manifests to include after MachineConfig
-  #     - extra.yaml      #            Ref: https://www.talos.dev/v1.7/reference/configuration/extensions/extensionserviceconfig/
-  #   extension_services: # (OPTIONAL) Additional talhelper ExtensionServices (supports talenv.sops.yaml envsubst)
-  #     - name: name
-  #       configFiles:
-  #         - content: |-
-  #             ...
-  #       mountPath: ...
-  #       environment:
-  #         - key=value
   # ...
 
-# (REQUIRED) The DNS servers to use for the cluster nodes.
+# (REQUIRED) The DNS servers to use for the cluster nodes. (DEFAULT: Cloudflare DNS)
 dns_servers:
   - "1.1.1.1"
   - "1.0.0.1"
 
-# (REQUIRED) The NTP servers to use for the cluster nodes.
+# (REQUIRED) The NTP servers to use for the cluster nodes. (DEFAULT: Cloudflare NTP)
 ntp_servers:
   - "162.159.200.1"
   - "162.159.200.123"
 
 # (REQUIRED) The pod CIDR for the cluster, this must NOT overlap with any
 #   existing networks and is usually a /16 (64K IPs).
-# If you want to use IPv6 check the advanced flags below and be aware of
-# https://github.com/onedr0p/cluster-template/discussions/1510
+# If you want to use IPv6 check the advanced flags below
 pod_network: "10.69.0.0/16"
 
 # (REQUIRED) The service CIDR for the cluster, this must NOT overlap with any
 #   existing networks and is usually a /16 (64K IPs).
-# If you want to use IPv6 check the advanced flags below and be aware of
-# https://github.com/onedr0p/cluster-template/discussions/1510
+# If you want to use IPv6 check the advanced flags below
 service_network: "10.96.0.0/16"
 
 # (REQUIRED) The IP address of the Kube API, choose an available IP
@@ -72,78 +54,34 @@ age_pubkey: ""
 #   if you want to call the Kube API by hostname rather than IP
 tls_sans: []
 
-# (OPTIONAL) The default gateway for the nodes
-#   Leave blank if your default gateway is the same as the first IP in the network (.1)
-node_default_gateway: ""
-
-# (OPTIONAL) Add vlan tag to network master device, leave blank if you tag
-#   ports on your switch or do not use VLANs at all.
-#   Ref: https://www.talos.dev/latest/advanced/advanced-networking/#vlans
-vlan: ""
-
-# (OPTIONAL) Use cilium BGP control plane when L2 announcements won't traverse VLAN network segments.
-#   Needs a BGP capable router setup with the node IPs as peers.
-#   Ref: https://docs.cilium.io/en/latest/network/bgp-control-plane/
-bgp:
-  enabled: false
-  # (OPTIONAL) If using multiple BGP peers add them here.
-  #   DEFAULT: .1 derrived from host_network: ['x.x.x.1']
-  peers: []
-  # (REQUIRED) Set the BGP Autonomous System Number for the router(s) and nodes.
-  #   If these match, iBGP will be used. If not, eBGP will be used.
-  peer_asn: ""   # Router(s) AS
-  local_asn: ""  # Node(s) AS
-  peer_port: 179 # BGP Port
-  # (REQUIRED) The advertised CIDR for the cluster, this must NOT overlap with any
-  #   existing networks and is usually a /16
-  # If you want to use IPv6 check the advanced flags below
-  advertised_network: ""
-
-# (OPTIONAL) Secureboot and TPM-based disk encryption
-#   Ref: https://www.talos.dev/v1.8/talos-guides/install/bare-metal-platforms/secureboot
-secureboot:
-  # (OPTIONAL) Enable secureboot on UEFI systems. Not supported on x86 platforms in BIOS mode.
-  enabled: false
-  # (OPTIONAL) Enable TPM-based disk encryption. Requires TPM 2.0
-  encrypt_disk_with_tpm: false
-
-# (OPTIONAL) Change Cilium load balancer mode
-#   Ref: https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/
-loadbalancer_mode: "dsr"
+# (REQUIRED) GitHub details for Flux - Flux is used to manage the cluster configuration.
+github:
+  # (REQUIRED) GitHub repository URL
+  #   For a public repo use the 'https://' URL (e.g. "https://github.com/onedr0p/cluster-template.git")
+  #   For a private repo use the 'ssh://' URL (e.g. "ssh://git@github.com/onedr0p/cluster-template.git")
+  #     If using a private repo make sure to following the instructions with the 'github.private_key' option below.
+  address: ""
+  # (REQUIRED) GitHub repository branch
+  branch: "main"
+  # (REQUIRED) Token for GitHub push-based sync
+  # 1. Generate a new token with the following command:
+  #    > openssl rand -hex 16
+  # 2. Copy the token and paste it below
+  webhook_token: ""
+  # (OPTIONAL) Private key for Flux to access the GitHub repository
+  #   1. Generate a new key with the following command:
+  #      > ssh-keygen -t ecdsa -b 521 -C "github-deploy-key" -f github-deploy.key -q -P ""
+  #   2. Make sure to paste public key from "github-deploy.key.pub" into
+  #      the deploy keys section of your GitHub repository settings.
+  #   3. Uncomment and paste the private key below
+  #   4. Optionally set your repository on GitHub to private
+  # private_key: |
+  #   -----BEGIN OPENSSH PRIVATE KEY-----
+  #   ...
+  #   -----END OPENSSH PRIVATE KEY-----
 
 #
-# 2. (REQUIRED) Flux details - Flux is used to manage the cluster configuration.
-#
-
-# (REQUIRED) GitHub repository URL
-#   For a public repo use the 'https://' URL (e.g. "https://github.com/onedr0p/cluster-template.git")
-#   For a private repo use the 'ssh://' URL (e.g. "ssh://git@github.com/onedr0p/cluster-template.git")
-#     If using a private repo make sure to following the instructions with the 'github_private_key' option below.
-github_address: ""
-
-# (REQUIRED) GitHub repository branch
-github_branch: "main"
-
-# (REQUIRED) Token for GitHub push-based sync
-# 1. Generate a new token with the following command:
-#    > openssl rand -hex 16
-# 2. Copy the token and paste it below
-github_webhook_token: ""
-
-# (OPTIONAL) Private key for Flux to access the GitHub repository
-#   1. Generate a new key with the following command:
-#      > ssh-keygen -t ecdsa -b 521 -C "github-deploy-key" -f github-deploy.key -q -P ""
-#   2. Make sure to paste public key from "github-deploy.key.pub" into
-#      the deploy keys section of your GitHub repository settings.
-#   3. Uncomment and paste the private key below
-#   4. Optionally set your repository on GitHub to private
-# github_private_key: |
-#   -----BEGIN OPENSSH PRIVATE KEY-----
-#   ...
-#   -----END OPENSSH PRIVATE KEY-----
-
-#
-# 3. (OPTIONAL) Cloudflare details - Cloudflare is used for DNS, TLS certificates and tunneling.
+# (OPTIONAL) Cloudflare details - Cloudflare is used for DNS, TLS certificates and tunneling.
 #
 
 cloudflare:
@@ -157,7 +95,7 @@ cloudflare:
   #      https://dash.cloudflare.com/profile/api-tokens
   #   2. Under the `API Tokens` section click the blue `Create Token` button.
   #   3. Click the blue `Use template` button for the `Edit zone DNS` template.
-  #   4. Name your token something like `home-kubernetes`
+  #   4. Name your token something like `kubernetes`
   #   5. Under `Permissions`, click `+ Add More` and add each permission below:
   #      `Zone - DNS - Edit`
   #      `Account - Cloudflare Tunnel - Read`
@@ -201,6 +139,44 @@ cloudflare:
     # The Load balancer IP for external ingress, choose an available IP
     #   in your nodes host network that is NOT being used. This is announced over L2.
     ingress_vip: ""
+
+#
+# (ADVANCED) Here be dragons - Advanced settings for the brave
+#
+
+# (OPTIONAL) The default gateway for the nodes
+#   Leave blank if your default gateway is the same as the first IP in the network (.1)
+node_default_gateway: ""
+
+# (OPTIONAL) Add vlan tag to network master device, leave blank if you tag
+#   ports on your switch or do not use VLANs at all.
+#   Ref: https://www.talos.dev/latest/advanced/advanced-networking/#vlans
+vlan: ""
+
+# (OPTIONAL) Change Cilium load balancer mode
+#   Ref: https://docs.cilium.io/en/stable/network/kubernetes/kubeproxy-free/
+loadbalancer_mode: "dsr"
+
+# (OPTIONAL) Use cilium BGP control plane for L3 routing
+#   Needs a BGP capable router setup with the node IPs as peers.
+#   To keep things simple, node network will be used for BGP peering.
+#   Ref: https://docs.cilium.io/en/latest/network/bgp-control-plane/
+bgp:
+  enabled: false
+  # (REQUIRED) Router IP address - BGP must be configured on this router using FRR or similar
+  router_address: ""
+  # (REQUIRED) Router ASN
+  router_asn: 64513
+  # (REQUIRED) Node ASN
+  node_asn: 64514
+
+# (OPTIONAL) Secureboot and TPM-based disk encryption
+#   Ref: https://www.talos.dev/v1.9/talos-guides/install/bare-metal-platforms/secureboot
+secureboot:
+  # (OPTIONAL) Enable secureboot on UEFI systems. Not supported on x86 platforms in BIOS mode.
+  enabled: false
+  # (OPTIONAL) Enable TPM-based disk encryption. Requires TPM 2.0
+  encrypt_disk: false
 
 # (OPTIONAL) Feature gates are used to enable experimental features
 feature_gates:
