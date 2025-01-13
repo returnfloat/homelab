@@ -5,7 +5,7 @@ talosVersion: v1.9.1
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 kubernetesVersion: v1.32.0
 
-clusterName: "home-kubernetes"
+clusterName: kubernetes
 endpoint: https://192.168.90.2:6443
 
 clusterPodNets:
@@ -26,6 +26,8 @@ nodes:
   - hostname: "talos0"
     ipAddress: "192.168.90.101"
     installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
     talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
     controlPlane: true
     networkInterfaces:
@@ -35,7 +37,7 @@ nodes:
         addresses:
           - "192.168.90.101/24"
         routes:
-          - network: 0.0.0.0/0
+          - network: "0.0.0.0/0"
             gateway: "192.168.90.1"
         mtu: 1500
         vip:
@@ -43,6 +45,8 @@ nodes:
   - hostname: "talos1"
     ipAddress: "192.168.90.102"
     installDisk: "/dev/sda"
+    machineSpec:
+      secureboot: false
     talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
     controlPlane: true
     networkInterfaces:
@@ -52,7 +56,7 @@ nodes:
         addresses:
           - "192.168.90.102/24"
         routes:
-          - network: 0.0.0.0/0
+          - network: "0.0.0.0/0"
             gateway: "192.168.90.1"
         mtu: 1500
         vip:
@@ -60,6 +64,8 @@ nodes:
   - hostname: "gaia"
     ipAddress: "192.168.90.103"
     installDisk: "/dev/sdb"
+    machineSpec:
+      secureboot: false
     talosImageURL: factory.talos.dev/installer/2d61dd07b20062062ea671b4d01873506103b67c0f7a4c3fb6cf4ee85585dcb8
     controlPlane: true
     networkInterfaces:
@@ -69,7 +75,7 @@ nodes:
         addresses:
           - "192.168.90.103/24"
         routes:
-          - network: 0.0.0.0/0
+          - network: "0.0.0.0/0"
             gateway: "192.168.90.1"
         mtu: 1500
         vip:
@@ -77,19 +83,15 @@ nodes:
 
 # Global patches
 patches:
-  - "@./patches/global/containerd.yaml"
-  - "@./patches/global/disable-search-domain.yaml"
-  - "@./patches/global/dns.yaml"
-  - "@./patches/global/hostdns.yaml"
-  - "@./patches/global/kubelet.yaml"
-  - "@./patches/global/ntp.yaml"
-  - "@./patches/global/openebs-local.yaml"
-  - "@./patches/global/sysctl.yaml"
+  - "@./patches/global/machine-files.yaml"
+  - "@./patches/global/machine-kubelet.yaml"
+  - "@./patches/global/machine-network.yaml"
+  - "@./patches/global/machine-sysctls.yaml"
+  - "@./patches/global/machine-time.yaml"
 
 # Controller patches
 controlPlane:
   patches:
+    - "@./patches/controller/admission-controller-patch.yaml"
     - "@./patches/controller/cluster.yaml"
-    - "@./patches/controller/disable-admission-controller.yaml"
-    - "@./patches/controller/etcd.yaml"
 

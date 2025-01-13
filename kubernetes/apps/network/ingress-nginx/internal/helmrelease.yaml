@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -26,7 +27,7 @@ spec:
       service:
         annotations:
           lbipam.cilium.io/ips: "192.168.90.5"
-        externalTrafficPolicy: "Cluster"
+        externalTrafficPolicy: Cluster
       ingressClassResource:
         name: internal
         default: true
@@ -70,7 +71,7 @@ spec:
           namespaceSelector:
             any: true
       extraArgs:
-        default-ssl-certificate: "${SECRET_DOMAIN/./-}-production-tls"
+        default-ssl-certificate: "network/${SECRET_DOMAIN/./-}-staging-tls"
       resources:
         requests:
           cpu: 100m
