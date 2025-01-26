@@ -3,7 +3,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./namespace.yaml
   - ./cloudnative-pg/ks.yaml
   - ./pgadmin/ks.yaml
   - ./mosquitto/ks.yaml
@@ -11,5 +10,14 @@ resources:
   - ./grist/ks.yaml
   # - ./nocodb/ks.yaml
   # - ./baserow/ks.yaml
-
+components:
+  - ../../flux/components/namespace
+patches:
+  - # Add the name to the namespace
+    patch: |
+      - op: add
+        path: /metadata/name
+        value: databases
+    target:
+      kind: Namespace
 
