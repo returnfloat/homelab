@@ -2,18 +2,12 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: monitoring
+components:
+  - ../../flux/components/common
 resources:
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./kubernetes-dashboard/ks.yaml
   - ./weave-gitops/ks.yaml
-components:
-  - ../../flux/components/namespace
-patches:
-  - # Add the name to the namespace
-    patch: |
-      - op: add
-        path: /metadata/name
-        value: monitoring
-    target:
-      kind: Namespace
+

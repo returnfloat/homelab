@@ -2,18 +2,12 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: automation
+components:
+  - ../../flux/components/common
 resources:
   - ./n8n/ks.yaml
   - ./openwebui/ks.yaml
   - ./node-red/ks.yaml
   - ./windmill/ks.yaml
-components:
-  - ../../flux/components/namespace
-patches:
-  - # Add the name to the namespace
-    patch: |
-      - op: add
-        path: /metadata/name
-        value: automation
-    target:
-      kind: Namespace
+

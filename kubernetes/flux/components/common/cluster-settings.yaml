@@ -4,11 +4,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cluster-settings
-  namespace: flux-system
 data:
+  SETTING_EXAMPLE: This value will be available to all YAML resources as ${SETTING_EXAMPLE}
   TIMEZONE: "America/Los_Angeles"
-  CLUSTER_CIDR: "10.69.0.0/16"
-  NODE_CIDR: "192.168.90.0/24"
+  POSTGRESQL_HOST_INTERNAL: "postgresql-v16-rw.databases"
+  POSTGRESQL_IMMICH_HOST_INTERNAL: "immich-db-rw.databases"
   LB_UNIFI_ADDRESS: "192.168.90.200"
   LB_NPM_ADDRESS: "192.168.90.201"
   LB_POSTGRESQL_ADDRESS: "192.168.90.202"

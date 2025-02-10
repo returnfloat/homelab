@@ -10,6 +10,6 @@ instance:
   sync:
     kind: GitRepository
     url: "ssh://git@github.com/returnfloat/homelab.git"
+    pullSecret: github-deploy-key
     ref: "refs/heads/main"
     path: kubernetes/flux/cluster
-    pullSecret: github-deploy-key

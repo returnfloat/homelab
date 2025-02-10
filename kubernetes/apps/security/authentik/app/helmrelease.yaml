@@ -42,8 +42,13 @@ spec:
     server:
       replicas: 1
       initContainers:
-        - name: 01-init-db
-          image: ghcr.io/onedr0p/postgres-init:16.3
+        - name: 01-check-db-ready
+          image: postgres:16.6
+          command: ['sh', '-c',
+              'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
+              do echo Waiting for PostgreSQL database; sleep 5; done;']
+        - name: 02-initdb
+          image: ghcr.io/onedr0p/postgres-init:16.6
           envFrom:
             - secretRef:
                 name: *secret
