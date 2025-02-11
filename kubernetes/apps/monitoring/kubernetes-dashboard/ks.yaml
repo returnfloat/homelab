@@ -10,9 +10,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 30m
-  dependsOn:
-    - name: cert-manager
-    - name: metrics-server
   path: ./kubernetes/apps/monitoring/kubernetes-dashboard/app
   prune: true
   sourceRef:
