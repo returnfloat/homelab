@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-PROMETHEUS_OPERATOR_VERSION="v0.80.0"
+PROMETHEUS_OPERATOR_VERSION=v0.80.1
 
 apply_prometheus_operator_crds() {
     local crds=(

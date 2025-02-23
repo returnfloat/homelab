@@ -10,7 +10,7 @@ function log() {
 # Apply Prometheus CRDs
 function apply_prometheus_crds() {
     # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-    local -r version=v0.80.0
+    local -r version=v0.80.1
 
     local -r crds=(
         "alertmanagerconfigs"
