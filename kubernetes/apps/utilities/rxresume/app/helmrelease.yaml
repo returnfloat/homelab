@@ -61,7 +61,6 @@ spec:
             env:
               NODE_ENV: "production"
               PORT: &port 3001
-              PUBLIC_URL: "https://rxresume.${SECRET_DOMAIN}"
               CHROME_URL: "ws://rxresume-chrome.utilities:3000"
             envFrom:
               - secretRef:
