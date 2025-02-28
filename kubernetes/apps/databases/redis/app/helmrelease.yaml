@@ -35,6 +35,8 @@ spec:
       sentinel: true
       existingSecret: redis-external-secret
       existingSecretPasswordKey: REDIS_PASSWORD
+      usePasswordFiles: true
+      usePasswordFileFromSecret: true
     sentinel:
       enabled: false
       masterSet: redis-master
