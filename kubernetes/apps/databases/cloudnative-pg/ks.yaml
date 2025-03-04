@@ -9,9 +9,10 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 30m
+  interval: 1h
   path: ./kubernetes/apps/databases/cloudnative-pg/app
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -31,11 +32,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *cluster
-  interval: 30m
+  interval: 1h
   dependsOn:
     - name: cloudnative-pg
   path: ./kubernetes/apps/databases/cloudnative-pg/clusters
   prune: true
+  retryInterval: 2m
   sourceRef:
     kind: GitRepository
     name: flux-system
