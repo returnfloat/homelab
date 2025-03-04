@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: k8s-gateway
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: k8s-gateway
@@ -29,6 +29,6 @@ spec:
       type: LoadBalancer
       port: 53
       annotations:
-        lbipam.cilium.io/ips: "#{ cloudflare.gateway_vip }#"
+        lbipam.cilium.io/ips: "#{ cluster_dns_gateway_addr }#"
       externalTrafficPolicy: Cluster
     watchedResources: ["Ingress", "Service"]

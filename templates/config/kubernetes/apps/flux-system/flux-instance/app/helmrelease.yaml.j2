@@ -5,11 +5,11 @@ kind: HelmRelease
 metadata:
   name: flux-instance
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: flux-instance
-      version: 0.15.0
+      version: 0.17.0
       sourceRef:
         kind: HelmRepository
         name: controlplaneio
@@ -27,4 +27,4 @@ spec:
       namespace: flux-system
   valuesFrom:
     - kind: ConfigMap
-      name: flux-instance-helm-values
+      name: flux-instance-values
