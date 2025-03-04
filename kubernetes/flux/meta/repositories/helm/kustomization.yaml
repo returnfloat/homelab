@@ -12,22 +12,18 @@ resources:
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
   - ./metrics-server.yaml
-  - ./openebs.yaml
-  - ./prometheus-community.yaml
   - ./spegel.yaml
   - ./stakater.yaml
   ## User repos
   - ./authentik.yaml
-  - ./backube.yaml
   - ./bitnami.yaml
   - ./cloudnative-pg.yaml
-  - ./coder-v2.yaml
   - ./csi-driver-nfs.yaml
   - ./external-secrets.yaml
   - ./grafana.yaml
   - ./kubernetes-dashboard.yaml
   - ./open-webui.yaml
-  - ./piraeus.yaml
+  - ./openebs.yaml
+  - ./prometheus-community.yaml
   - ./weave-gitops.yaml
-  - ./xenitab.yaml
   - ./windmill.yaml
