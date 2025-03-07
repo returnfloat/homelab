@@ -6,7 +6,7 @@ talosVersion: v1.9.4
 kubernetesVersion: v1.32.2
 
 clusterName: kubernetes
-endpoint: https://192.168.90.2:6443
+endpoint: https://10.0.90.2:6443
 
 clusterPodNets:
   - "10.42.0.0/16"
@@ -15,7 +15,7 @@ clusterSvcNets:
 
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - "192.168.90.2"
+  - "10.0.90.2"
 additionalMachineCertSans: *sans
 
 # Disable built-in CNI to use Cilium
@@ -24,7 +24,7 @@ cniConfig:
 
 nodes:
   - hostname: "talos0"
-    ipAddress: "192.168.90.101"
+    ipAddress: "10.0.90.10"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
@@ -35,15 +35,15 @@ nodes:
           hardwareAddr: "de:84:77:ae:8b:1e"
         dhcp: false
         addresses:
-          - "192.168.90.101/24"
+          - "10.0.90.10/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.90.1"
+            gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "192.168.90.2"
+          ip: "10.0.90.2"
   - hostname: "talos1"
-    ipAddress: "192.168.90.102"
+    ipAddress: "10.0.90.11"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
@@ -54,15 +54,15 @@ nodes:
           hardwareAddr: "de:f8:f2:61:d1:22"
         dhcp: false
         addresses:
-          - "192.168.90.102/24"
+          - "10.0.90.11/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.90.1"
+            gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "192.168.90.2"
+          ip: "10.0.90.2"
   - hostname: "gaia"
-    ipAddress: "192.168.90.103"
+    ipAddress: "10.0.90.12"
     installDisk: "/dev/sdb"
     machineSpec:
       secureboot: false
@@ -73,13 +73,13 @@ nodes:
           hardwareAddr: "78:2b:cb:b7:be:6b"
         dhcp: false
         addresses:
-          - "192.168.90.103/24"
+          - "10.0.90.12/24"
         routes:
           - network: "0.0.0.0/0"
-            gateway: "192.168.90.1"
+            gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "192.168.90.2"
+          ip: "10.0.90.2"
 
 # Global patches
 patches:

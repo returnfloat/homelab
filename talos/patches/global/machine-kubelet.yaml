@@ -10,4 +10,4 @@ machine:
           - rw
     nodeIP:
       validSubnets:
-        - 192.168.90.0/24
+        - 10.0.90.0/24
