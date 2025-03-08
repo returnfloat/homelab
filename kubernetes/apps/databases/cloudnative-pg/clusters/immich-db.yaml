@@ -35,7 +35,7 @@ spec:
         maxParallel: 4
       destinationPath: &dest s3://immich-db/
       endpointURL: &minio http://minio.storage:9000
-      serverName: &currBucketFolder immich-db-4
+      serverName: &currBucketFolder immich-db-1
       s3Credentials: &s3creds
         accessKeyId:
           name: immich-db-external-secret
@@ -57,21 +57,21 @@ spec:
   ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
   ##########################################################################################################
-  # bootstrap:
-  #   # Use this to recover a net-new cluster from a backup
-  #   recovery:
-  #     source: &prevBucketFolder immich-db-3
-  #     # recoveryTarget:
-  #     #   # Time base target for the recovery
-  #     #   targetTime: "2024-07-27 00:00:00.00000"
-  # externalClusters:
-  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
-  #   - name: *prevBucketFolder
-  #     barmanObjectStore:
-  #       wal:
-  #         compression: *compr
-  #         maxParallel: 4
-  #       serverName: *prevBucketFolder
-  #       destinationPath: *dest
-  #       endpointURL: *minio
-  #       s3Credentials: *s3creds
+  bootstrap:
+    # Use this to recover a net-new cluster from a backup
+    recovery:
+      source: &prevBucketFolder immich-db-4
+      # recoveryTarget:
+      #   # Time base target for the recovery
+      #   targetTime: "2024-07-27 00:00:00.00000"
+  externalClusters:
+    # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+    - name: *prevBucketFolder
+      barmanObjectStore:
+        wal:
+          compression: *compr
+          maxParallel: 4
+        serverName: *prevBucketFolder
+        destinationPath: *dest
+        endpointURL: *minio
+        s3Credentials: *s3creds
