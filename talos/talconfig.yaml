@@ -5,10 +5,10 @@ clusterName: kubernetes
 talosVersion: "${talosVersion}"
 kubernetesVersion: "${kubernetesVersion}"
 
-endpoint: https://10.0.90.2:6443
+endpoint: https://10.0.90.3:6443
 additionalApiServerCertSans: &sans
   - "127.0.0.1"
-  - "10.0.90.2"
+  - "10.0.90.3"
 additionalMachineCertSans: *sans
 
 clusterPodNets: ["10.42.0.0/16"]
@@ -37,7 +37,7 @@ nodes:
             gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "10.0.90.2"
+          ip: "10.0.90.3"
   - hostname: "talos1"
     ipAddress: "10.0.90.11"
     installDisk: "/dev/sda"
@@ -56,7 +56,7 @@ nodes:
             gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "10.0.90.2"
+          ip: "10.0.90.3"
   - hostname: "gaia"
     ipAddress: "10.0.90.12"
     installDisk: "/dev/sdb"
@@ -75,7 +75,7 @@ nodes:
             gateway: "10.0.90.1"
         mtu: 1500
         vip:
-          ip: "10.0.90.2"
+          ip: "10.0.90.3"
 
 # Global patches
 patches:
