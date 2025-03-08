@@ -7,7 +7,7 @@ metadata:
     kustomize.toolkit.fluxcd.io/substitute: disabled
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: "skystation-dmz.lan.aka.sh"
+  server: "10.0.90.2"
   share: "/volume1/homelab"
   subDir: "${pvc.metadata.namespace}-${pvc.metadata.name}"
 reclaimPolicy: Retain

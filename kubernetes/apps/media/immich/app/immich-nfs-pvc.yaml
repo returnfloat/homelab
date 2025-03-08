@@ -10,7 +10,7 @@ spec:
   accessModes: ["ReadWriteMany"]
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: skystation-dmz.lan.aka.sh
+    server: 10.0.90.2
     path: /volume1/homelab/immich
   mountOptions: ["nfsvers=4.1", "nconnect=8", "hard", "noatime"]
 ---
