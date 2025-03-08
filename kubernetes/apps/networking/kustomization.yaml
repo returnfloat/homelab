@@ -8,5 +8,5 @@ components:
 resources:
   # - ./unifi/ks.yaml
   # - ./unpoller/ks.yaml
-  # - ./npm/ks.yaml
+  - ./npm/ks.yaml
 
