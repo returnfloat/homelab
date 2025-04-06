@@ -58,7 +58,7 @@ spec:
           app:
             image:
               repository: n8nio/n8n
-              tag: 1.82.1
+              tag: 1.86.0
             env:
               GENERIC_TIMEZONE: "${TIMEZONE}"
               EXECUTIONS_TIMEOUT: "600"
