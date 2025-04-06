@@ -33,7 +33,7 @@ spec:
         maxParallel: 4
       destinationPath: &dest s3://postgresql/
       endpointURL: &minio http://minio.storage:9000
-      serverName: &currBucketFolder postgres-v16-1
+      serverName: &currBucketFolder postgres-v16-2
       s3Credentials: &s3creds
         accessKeyId:
           name: shared-db-external-secret
@@ -54,25 +54,25 @@ spec:
   # ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
   # ##########################################################################################################
-  # bootstrap:
-  #   # Use this to recover a net-new cluster from a backup
-  #   recovery:
-  #     source: &prevBucketFolder postgres-v16-4
-  #     # recoveryTarget:
-  #     #   # Time base target for the recovery
-  #     #   # targetTime: "2024-07-19 00:00:00.00000"
-  #     #   targetLSN: "81/67000060"
-  # externalClusters:
-  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
-  #   - name: *prevBucketFolder
-  #     barmanObjectStore:
-  #       wal:
-  #         compression: *compr
-  #         maxParallel: 4
-  #       serverName: *prevBucketFolder
-  #       destinationPath: *dest
-  #       endpointURL: *minio
-  #       s3Credentials: *s3creds
+  bootstrap:
+    # Use this to recover a net-new cluster from a backup
+    recovery:
+      source: &prevBucketFolder postgres-v16-1
+      # recoveryTarget:
+      #   # Time base target for the recovery
+      #   # targetTime: "2024-07-19 00:00:00.00000"
+      #   targetLSN: "81/67000060"
+  externalClusters:
+    # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+    - name: *prevBucketFolder
+      barmanObjectStore:
+        wal:
+          compression: *compr
+          maxParallel: 4
+        serverName: *prevBucketFolder
+        destinationPath: *dest
+        endpointURL: *minio
+        s3Credentials: *s3creds
 
   # ##########################################################################################################
   # Bootstrap from an existing live cluster (same PostgreSQL major version)
