@@ -6,6 +6,7 @@ metadata:
   name: bitnami-minio
   namespace: storage
 spec:
+  type: oci
   interval: 1h
   url: https://charts.bitnami.com/bitnami
 ---
