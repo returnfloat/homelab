@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: automation
 components:
   - ../../components/common
+  - ../../components/repos/app-template
 resources:
   - ./n8n/ks.yaml
   - ./openwebui/ks.yaml

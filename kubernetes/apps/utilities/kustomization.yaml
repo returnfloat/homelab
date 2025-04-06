@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: utilities
 components:
   - ../../components/common
+  - ../../components/repos/app-template
 resources:
   - ./cyberchef/ks.yaml
   - ./teslamate/ks.yaml

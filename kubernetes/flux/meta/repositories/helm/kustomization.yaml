@@ -3,6 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+## Main repos
   - ./cilium.yaml
   - ./external-dns.yaml
   - ./ingress-nginx.yaml
@@ -10,15 +11,15 @@ resources:
   - ./k8s-gateway.yaml
   - ./metrics-server.yaml
     ## User repos
-  - ./authentik.yaml
-  - ./bitnami.yaml
-  - ./cloudnative-pg.yaml
-  - ./csi-driver-nfs.yaml
-  - ./external-secrets.yaml
-  - ./grafana.yaml
-  - ./kubernetes-dashboard.yaml
-  - ./open-webui.yaml
-  - ./openebs.yaml
-  - ./prometheus-community.yaml
-  - ./weave-gitops.yaml
-  - ./windmill.yaml
+  # - ./authentik.yaml
+  # - ./bitnami.yaml
+  # - ./cloudnative-pg.yaml
+  # - ./csi-driver-nfs.yaml
+  # - ./external-secrets.yaml
+  # - ./grafana.yaml
+  # - ./kubernetes-dashboard.yaml
+  # - ./open-webui.yaml
+  # - ./openebs.yaml
+  # - ./prometheus-community.yaml
+  # - ./weave-gitops.yaml
+  # - ./windmill.yaml

@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: networking
 components:
   - ../../components/common
+  - ../../components/repos/app-template
 resources:
   # - ./unifi/ks.yaml
   # - ./unpoller/ks.yaml

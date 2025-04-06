@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: databases
 components:
   - ../../components/common
+  - ../../components/repos/app-template
 resources:
   - ./cloudnative-pg/ks.yaml
   - ./pgadmin/ks.yaml
