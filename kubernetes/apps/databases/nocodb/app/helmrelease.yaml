@@ -60,7 +60,7 @@ spec:
           app:
             image:
               repository: nocodb/nocodb
-              tag: 0.262.1
+              tag: 0.262.5
             env:
               PORT: &port 8080
               NC_DISABLE_TELE: "true"
