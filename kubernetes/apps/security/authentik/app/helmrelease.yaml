@@ -58,7 +58,7 @@ spec:
               'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
         - name: 02-initdb
-          image: ghcr.io/onedr0p/postgres-init:16.6
+          image: ghcr.io/onedr0p/postgres-init:16.8
           envFrom:
             - secretRef:
                 name: *secret
