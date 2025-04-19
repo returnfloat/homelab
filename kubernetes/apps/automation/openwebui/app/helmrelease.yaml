@@ -19,7 +19,7 @@ spec:
   chart:
     spec:
       chart: open-webui
-      version: 6.2.0
+      version: 6.4.0
       sourceRef:
         kind: HelmRepository
         name: open-webui
