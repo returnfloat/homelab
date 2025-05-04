@@ -24,7 +24,7 @@ spec:
         kind: HelmRepository
         name: bitnami-minio
         namespace: storage
-      version: 16.0.7
+      version: 16.0.8
   interval: 1h
   maxHistory: 3
   install:
