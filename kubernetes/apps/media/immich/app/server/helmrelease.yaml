@@ -50,7 +50,7 @@ spec:
           02-initdb:
             image:
               repository: ghcr.io/onedr0p/postgres-init
-              tag: 16.5
+              tag: 17.4
             envFrom:
               - secretRef:
                   name: *secret
