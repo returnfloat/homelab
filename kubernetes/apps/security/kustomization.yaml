@@ -5,8 +5,7 @@ kind: Kustomization
 namespace: security
 components:
   - ../../components/common
-  - ../../components/repos/app-template
 resources:
-  - ./external-secrets/ks.yaml
-  - ./authentik/ks.yaml
+  # - ./external-secrets/ks.yaml
+  # - ./authentik/ks.yaml
 

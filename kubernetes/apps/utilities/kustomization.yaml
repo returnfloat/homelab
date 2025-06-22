@@ -5,14 +5,13 @@ kind: Kustomization
 namespace: utilities
 components:
   - ../../components/common
-  - ../../components/repos/app-template
 resources:
-  - ./cyberchef/ks.yaml
-  - ./teslamate/ks.yaml
-  - ./nginx-static/ks.yaml
-  - ./paperless/ks.yaml
-  - ./outline/ks.yaml
-  - ./vikunja/ks.yaml
-  - ./drawio/ks.yaml
-  - ./rxresume/ks.yaml
-  - ./hoarder/ks.yaml
+  # - ./cyberchef/ks.yaml
+  # - ./teslamate/ks.yaml
+  # - ./nginx-static/ks.yaml
+  # - ./paperless/ks.yaml
+  # - ./outline/ks.yaml
+  # - ./vikunja/ks.yaml
+  # - ./drawio/ks.yaml
+  # - ./rxresume/ks.yaml
+  # - ./hoarder/ks.yaml
