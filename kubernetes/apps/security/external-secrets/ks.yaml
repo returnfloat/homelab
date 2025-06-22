@@ -32,6 +32,8 @@ metadata:
   name:  &app2 external-secrets-stores
   namespace: &namespace2 security
 spec:
+  dependsOn:
+    - name: external-secrets
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app2

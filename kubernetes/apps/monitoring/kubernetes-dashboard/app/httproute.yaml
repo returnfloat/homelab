@@ -14,7 +14,32 @@ spec:
       namespace: kube-system
       sectionName: https
   rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api/v1/login
+        - path:
+            type: PathPrefix
+            value: /api/v1/csrftoken/login
+        - path:
+            type: PathPrefix
+            value: /api/v1/me
+      backendRefs:
+        - name: kubernetes-dashboard-auth
+          namespace: monitoring
+          port: 8000
+          weight: 1
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: kubernetes-dashboard-api
+          namespace: monitoring
+          port: 8000
+          weight: 1
     - backendRefs:
         - name: kubernetes-dashboard-web
+          namespace: monitoring
           port: 8000
           weight: 1
