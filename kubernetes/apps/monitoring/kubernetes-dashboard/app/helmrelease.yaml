@@ -35,6 +35,12 @@ spec:
     keepHistory: false
   values:
     app:
+      mode: 'dashboard'
+      settings:
+        global:
+          clusterName: "homelab"
+          logsAutoRefreshTimeInterval: 1
+          resourceAutoRefreshTimeInterval: 5
       ingress:
         enabled: false
       # extraArgs:
@@ -43,3 +49,4 @@ spec:
       #   - --disable-settings-authorizer
     metricsScraper:
       enabled: true
+

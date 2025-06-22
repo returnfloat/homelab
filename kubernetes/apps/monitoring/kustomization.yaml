@@ -8,6 +8,6 @@ components:
 resources:
   # - ./grafana/ks.yaml
   # - ./kube-prometheus-stack/ks.yaml
-  # - ./kubernetes-dashboard/ks.yaml
+  - ./kubernetes-dashboard/ks.yaml
   - ./weave-gitops/ks.yaml
 
