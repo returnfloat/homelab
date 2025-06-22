@@ -40,16 +40,7 @@ spec:
       createSecret: false
       username: admin
     ingress:
-      enabled: true
-      className: internal
-      hosts:
-        - host: &host "gitops.${SECRET_DOMAIN}"
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - *host
+      enabled: false
     networkPolicy:
       create: false
     metrics:

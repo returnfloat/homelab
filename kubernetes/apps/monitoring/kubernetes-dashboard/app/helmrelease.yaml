@@ -36,10 +36,7 @@ spec:
   values:
     app:
       ingress:
-        enabled: true
-        ingressClassName: internal
-        hosts:
-          - "kubernetes.${SECRET_DOMAIN}"
+        enabled: false
       # extraArgs:
       #   - --enable-insecure-login
       #   - --enable-skip-login
