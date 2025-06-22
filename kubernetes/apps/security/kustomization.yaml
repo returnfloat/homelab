@@ -6,6 +6,6 @@ namespace: security
 components:
   - ../../components/common
 resources:
-  # - ./external-secrets/ks.yaml
+  - ./external-secrets/ks.yaml
   # - ./authentik/ks.yaml
 
