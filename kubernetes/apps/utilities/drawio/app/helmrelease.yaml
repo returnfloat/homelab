@@ -42,7 +42,7 @@ spec:
             port: 8443
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        hostnames: ["draw.${SECRET_DOMAIN}"]
         parentRefs:
           - name: internal
             namespace: kube-system
