@@ -2,13 +2,19 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgresql-v16
+  name: postgresql-v17
   namespace: databases
 spec:
   instances: 2
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.8
+  imageName: ghcr.io/cloudnative-pg/postgresql:17.5-standard-bookworm
   primaryUpdateStrategy: unsupervised
   enableSuperuserAccess: true
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: postgresql-objectstore
+        serverName: &currBucketFolder postgresql-v17-1
   storage:
     size: 30Gi
     storageClass: openebs-hostpath
@@ -21,26 +27,6 @@ spec:
       timezone: "America/Los_Angeles"
   monitoring:
     enablePodMonitor: true
-  backup:
-    retentionPolicy: 30d
-    # ########################################################################################################
-    # Minio bucket configuration for current backups. serverName corresponds to a folder name in the bucket.
-    # Note: Change *currBucketFolder at every new recovery bootstrap.
-    # ########################################################################################################
-    barmanObjectStore:
-      wal:
-        compression: &compr bzip2
-        maxParallel: 4
-      destinationPath: &dest s3://postgresql/
-      endpointURL: &minio http://minio.storage:9000
-      serverName: &currBucketFolder postgres-v16-3
-      s3Credentials: &s3creds
-        accessKeyId:
-          name: shared-db-external-secret
-          key: aws-access-key-id
-        secretAccessKey:
-          name: shared-db-external-secret
-          key: aws-secret-access-key
   # ##########################################################################################################
   # Bootstrap a brand new cluster with a new app database and owner.
   # ##########################################################################################################
@@ -57,7 +43,7 @@ spec:
   # bootstrap:
   #   # Use this to recover a net-new cluster from a backup
   #   recovery:
-  #     source: &prevBucketFolder postgres-v16-2
+  #     source: &prevBucketFolder postgres-v17-1
   #     # recoveryTarget:
   #     #   # Time base target for the recovery
   #     #   # targetTime: "2024-07-19 00:00:00.00000"
@@ -65,14 +51,11 @@ spec:
   # externalClusters:
   #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
   #   - name: *prevBucketFolder
-  #     barmanObjectStore:
-  #       wal:
-  #         compression: *compr
-  #         maxParallel: 4
-  #       serverName: *prevBucketFolder
-  #       destinationPath: *dest
-  #       endpointURL: *minio
-  #       s3Credentials: *s3creds
+  #     plugin:
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters:
+  #         barmanObjectName: postgresql-objectstore
+  #         serverName: *prevBucketFolder
 
   # ##########################################################################################################
   # Bootstrap from an existing live cluster (same PostgreSQL major version)
@@ -109,12 +92,12 @@ spec:
   #       roles:
   #         - "*"
   #       source:
-  #         externalCluster: postgresql-bitnami
+  #         externalCluster: postgresql-v16
   # externalClusters:
   #   # This must be equal or higher PostgreSQL major version as the new cluster
-  #   - name: postgresql-bitnami
+  #   - name: postgresql-v16
   #     connectionParameters:
-  #       host: postgresql-bitnami.databases
+  #       host: postgresql-v16.databases
   #       user: postgres
   #     password:
   #       name: postgresql-superuser-secret

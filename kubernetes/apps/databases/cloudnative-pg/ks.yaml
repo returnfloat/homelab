@@ -28,22 +28,21 @@ spec:
   targetNamespace: *namespace
   timeout: 5m
   wait: false
-
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name:  &cluster cloudnative-pg-clusters
+  name:  &barman cloudnative-pg-barman-cloud-plugin
   namespace: &namespace2 databases
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *cluster
+      app.kubernetes.io/name: *barman
   interval: 1h
   dependsOn:
     - name: cloudnative-pg
-  path: ./kubernetes/apps/databases/cloudnative-pg/clusters
+  path: ./kubernetes/apps/databases/cloudnative-pg/barman-cloud-plugin
   postBuild:
     substituteFrom:
       - name: cluster-secrets
@@ -55,5 +54,34 @@ spec:
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace2
+  timeout: 5m
+  wait: false
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name:  &cluster cloudnative-pg-clusters
+  namespace: &namespace3 databases
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *cluster
+  interval: 1h
+  dependsOn:
+    - name: cloudnative-pg
+    - name: cloudnative-pg-barman-cloud-plugin
+  path: ./kubernetes/apps/databases/cloudnative-pg/clusters
+  postBuild:
+    substituteFrom:
+      - name: cluster-secrets
+        kind: Secret
+  prune: true
+  retryInterval: 2m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace3
   timeout: 5m
   wait: false

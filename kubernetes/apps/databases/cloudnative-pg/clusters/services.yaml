@@ -2,6 +2,26 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: postgresql-v17
+  namespace: databases
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: postgresql-v17.${SECRET_DOMAIN}
+    lbipam.cilium.io/ips: "${LB_CNPG_V17_ADDRESS}"
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+  selector:
+    cnpg.io/cluster: postgresql-v17
+    role: primary
+---
+apiVersion: v1
+kind: Service
+metadata:
   name: postgresql-v16
   namespace: databases
   annotations:
@@ -18,7 +38,6 @@ spec:
   selector:
     cnpg.io/cluster: postgresql-v16
     role: primary
-
 ---
 apiVersion: v1
 kind: Service
