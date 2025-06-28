@@ -15,6 +15,6 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: windmill
+        - name: windmill-app
           port: 8000
           weight: 1
