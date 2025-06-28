@@ -6,7 +6,6 @@ namespace: media
 components:
   - ../../components/common
 resources:
-  # - ./kavita/ks.yaml
-  # - ./miniflux/ks.yaml
-  # - ./stash/ks.yaml
+  - ./miniflux/ks.yaml
+  - ./stash/ks.yaml
   - ./immich/ks.yaml
