@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app immich-server
+  namespace: media
 spec:
   interval: 1h
   chartRef:
@@ -43,14 +44,14 @@ spec:
           01-check-db-ready:
             image:
               repository: postgres
-              tag: 16.5
+              tag: 17.5
             command: ['sh', '-c',
               'until pg_isready -h ${POSTGRESQL_IMMICH_HOST_INTERNAL} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
           02-initdb:
             image:
               repository: ghcr.io/onedr0p/postgres-init
-              tag: 16.5
+              tag: 17.5
             envFrom:
               - secretRef:
                   name: *secret
@@ -58,7 +59,7 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.132.3
+              tag: v1.135.3
             env:
               IMMICH_WORKERS_INCLUDE: 'api'
             envFrom:
@@ -76,25 +77,18 @@ spec:
         controller: immich-server
         ports:
           http:
-            port: 2283
-    ingress:
+            port: &port 2283
+    route:
       app:
-        enabled: true
-        className: external
-        annotations:
-          nginx.ingress.kubernetes.io/proxy-body-size: "0"
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-        hosts:
-          - host: &host photos.${SECRET_DOMAIN}
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                  identifier: app
-                  port: http
-        tls:
-          - hosts:
-              - *host
+        hostnames: ["photos.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
     persistence:
       library:
         enabled: true

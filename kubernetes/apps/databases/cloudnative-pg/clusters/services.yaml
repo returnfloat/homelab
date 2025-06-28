@@ -18,15 +18,55 @@ spec:
   selector:
     cnpg.io/cluster: postgresql-v17
     role: primary
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: postgresql-v16
+#   namespace: databases
+#   annotations:
+#     external-dns.alpha.kubernetes.io/hostname: postgresql-v16.${SECRET_DOMAIN}
+#     lbipam.cilium.io/ips: "${LB_CNPG_V16_ADDRESS}"
+# spec:
+#   type: LoadBalancer
+#   externalTrafficPolicy: Cluster
+#   ports:
+#     - name: postgres
+#       port: 5432
+#       protocol: TCP
+#       targetPort: 5432
+#   selector:
+#     cnpg.io/cluster: postgresql-v16
+#     role: primary
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: immich-db
+#   namespace: databases
+#   annotations:
+#     external-dns.alpha.kubernetes.io/hostname: immich-db.${SECRET_DOMAIN}
+#     lbipam.cilium.io/ips: "${LB_IMMICH_DB_ADDRESS}"
+# spec:
+#   type: LoadBalancer
+#   externalTrafficPolicy: Cluster
+#   ports:
+#     - name: postgres
+#       port: 5432
+#       protocol: TCP
+#       targetPort: 5432
+#   selector:
+#     cnpg.io/cluster: immich-db
+#     role: primary
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgresql-v16
+  name: immich-db-v17
   namespace: databases
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: postgresql-v16.${SECRET_DOMAIN}
-    lbipam.cilium.io/ips: "${LB_CNPG_V16_ADDRESS}"
+    external-dns.alpha.kubernetes.io/hostname: immich-db-v17.${SECRET_DOMAIN}
+    lbipam.cilium.io/ips: "${LB_IMMICH_DB_V17_ADDRESS}"
 spec:
   type: LoadBalancer
   externalTrafficPolicy: Cluster
@@ -36,25 +76,5 @@ spec:
       protocol: TCP
       targetPort: 5432
   selector:
-    cnpg.io/cluster: postgresql-v16
-    role: primary
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: immich-db
-  namespace: databases
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: immich-db.${SECRET_DOMAIN}
-    lbipam.cilium.io/ips: "${LB_IMMICH_DB_ADDRESS}"
-spec:
-  type: LoadBalancer
-  externalTrafficPolicy: Cluster
-  ports:
-    - name: postgres
-      port: 5432
-      protocol: TCP
-      targetPort: 5432
-  selector:
-    cnpg.io/cluster: immich-db
+    cnpg.io/cluster: immich-db-v17
     role: primary

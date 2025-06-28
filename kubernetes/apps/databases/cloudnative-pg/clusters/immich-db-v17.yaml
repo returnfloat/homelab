@@ -1,0 +1,104 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db-v17
+  namespace: databases
+spec:
+  instances: 1
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.5-0.4.3
+  primaryUpdateStrategy: unsupervised
+  enableSuperuserAccess: true
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: immich-db-objectstore
+        serverName: &currBucketFolder immich-db-v17-1
+  storage:
+    size: 20Gi
+    storageClass: openebs-hostpath
+  superuserSecret:
+    name: postgresql-superuser-secret
+  postgresql:
+    parameters:
+      timezone: "America/Los_Angeles"
+    shared_preload_libraries:
+      - "vchord.so"
+  monitoring:
+    enablePodMonitor: true
+  # ##########################################################################################################
+  # Bootstrap a brand new cluster with a new app database and owner.
+  # ##########################################################################################################
+  # bootstrap:
+  #   initdb:
+  #     database: immich
+  #     owner: immich
+  #     secret:
+  #       name: immich-db-external-secret
+
+  ##########################################################################################################
+  # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
+  ##########################################################################################################
+  # bootstrap:
+  #   # Use this to recover a net-new cluster from a backup
+  #   recovery:
+  #     source: &prevBucketFolder immich-db-1
+  #     # recoveryTarget:
+  #     #   # Time base target for the recovery
+  #     #   targetTime: "2024-07-27 00:00:00.00000"
+  #     #   targetLSN: "81/67000060"
+  # externalClusters:
+  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+  #   - name: *prevBucketFolder
+  #     plugin:
+  #       name: barman-cloud.cloudnative-pg.io
+  #       parameters:
+  #         barmanObjectName: immich-db-objectstore
+  #         serverName: *prevBucketFolder
+
+  # ##########################################################################################################
+  # Bootstrap from an existing live cluster (same PostgreSQL major version)
+  # ##########################################################################################################
+  # bootstrap:
+  #   pg_basebackup:
+  #     source: immich-db
+  # externalClusters:
+  #   # This must be the same PostgreSQL major version as the new cluster
+  #   - name: immich-db
+  #     connectionParameters:
+  #       host: immich-db.databases.svc.cluster.local.
+  #       user: postgres
+  #     password:
+  #       name: postgresql-superuser-secret
+  #       key: password
+
+  # ##########################################################################################################
+  # Bootstrap from an existing live cluster (destination PostgreSQL major version higher than source)
+  # monolith - Bootstrap the entire cluster
+  # microservice - Bootstrap a single database
+  # ##########################################################################################################
+  # bootstrap:
+  #   initdb:
+  #     import:
+  #       # type: microservice
+  #       # databases:
+  #       #   - "akash"
+  #       # source:
+  #       #   externalCluster: postgresql-bitnami
+  #       type: monolith
+  #       databases:
+  #         - "*"
+  #       roles:
+  #         - "*"
+  #       source:
+  #         externalCluster: immich-db
+  # externalClusters:
+  #   # This must be equal or higher PostgreSQL major version as the new cluster
+  #   - name: immich-db
+  #     connectionParameters:
+  #       host: immich-db.databases
+  #       user: postgres
+  #     password:
+  #       name: postgresql-superuser-secret
+  #       key: password

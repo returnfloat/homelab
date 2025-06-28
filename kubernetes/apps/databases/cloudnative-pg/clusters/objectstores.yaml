@@ -1,3 +1,4 @@
+---
 apiVersion: barmancloud.cnpg.io/v1
 kind: ObjectStore
 metadata:
@@ -17,4 +18,26 @@ spec:
         key: aws-access-key-id
       secretAccessKey:
         name: shared-db-external-secret
+        key: aws-secret-access-key
+
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: immich-db-objectstore
+  namespace: databases
+spec:
+  retentionPolicy: 30d
+  configuration:
+    wal:
+      compression: bzip2
+      maxParallel: 4
+    destinationPath: s3://immich-db/
+    endpointURL: http://minio.storage:9000
+    s3Credentials:
+      accessKeyId:
+        name: immich-db-external-secret
+        key: aws-access-key-id
+      secretAccessKey:
+        name: immich-db-external-secret
         key: aws-secret-access-key
