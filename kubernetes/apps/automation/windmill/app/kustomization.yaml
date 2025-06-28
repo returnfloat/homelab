@@ -5,8 +5,10 @@ kind: Kustomization
 resources:
   - ./windmill-external-secret.yaml
   - ./helmrelease.yaml
+  - ./httproute.yaml
 configMapGenerator:
   - name: windmill-grants
+    namespace: automation
     files:
       - ./scripts/grants.sh
 generatorOptions:

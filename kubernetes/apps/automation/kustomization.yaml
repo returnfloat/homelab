@@ -6,8 +6,7 @@ namespace: automation
 components:
   - ../../components/common
 resources:
-  # - ./n8n/ks.yaml
-  # - ./openwebui/ks.yaml
-  # - ./node-red/ks.yaml
-  # - ./windmill/ks.yaml
+  - ./n8n/ks.yaml
+  - ./openwebui/ks.yaml
+  - ./windmill/ks.yaml
 

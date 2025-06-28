@@ -14,12 +14,13 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app openwebui
+  namespace: automation
 spec:
   interval: 1h
   chart:
     spec:
       chart: open-webui
-      version: 6.15.0
+      version: 6.22.0
       sourceRef:
         kind: HelmRepository
         name: open-webui
@@ -44,11 +45,10 @@ spec:
       enabled: false
     pipelines:
       enabled: false
-    ingress:
+    tika:
       enabled: true
-      class: "internal"
-      host: "ai.${SECRET_DOMAIN}"
-      tls: true
+    ingress:
+      enabled: false
     persistence:
       enabled: true
       size: 10Gi

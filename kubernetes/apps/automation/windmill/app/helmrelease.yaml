@@ -14,6 +14,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app windmill
+  namespace: automation
 spec:
   interval: 1h
   chart:
@@ -102,13 +103,7 @@ spec:
         - name: "gpu"
           replicas: 0
     ingress:
-      enabled: true
-      # annotations:
-      #   external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-      className: internal
-      tls:
-        - hosts:
-            - *host
+      enabled: false
     postgresql:
       enabled: false
     minio:
