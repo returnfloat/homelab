@@ -15,6 +15,6 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: openwebui
+        - name: open-webui
           port: 80
           weight: 1
