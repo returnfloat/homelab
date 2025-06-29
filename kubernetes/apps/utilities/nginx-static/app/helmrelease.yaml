@@ -4,6 +4,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: &app nginx-static
+  namespace: utilities
 spec:
   interval: 1h
   chartRef:
@@ -35,24 +36,18 @@ spec:
         controller: nginx-static
         ports:
           http:
-            port: 80
-    ingress:
+            port: &port 80
+    route:
       app:
-        enabled: true
-        className: external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-        hosts:
-          - host: &host "static.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                pathType: Prefix
-                service:
-                    identifier: app
-                    port: http
-        tls:
-          - hosts:
-              - *host
+        hostnames: ["static.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
     persistence:
       www:
         enabled: true
