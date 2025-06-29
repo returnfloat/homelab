@@ -54,7 +54,7 @@ spec:
       replicas: 1
       initContainers:
         - name: 01-check-db-ready
-          image: postgres:16.6
+          image: postgres:17.5
           command: ['sh', '-c',
               'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
