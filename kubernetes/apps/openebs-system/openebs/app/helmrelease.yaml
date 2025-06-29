@@ -14,12 +14,13 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: openebs
+  namespace: openebs-system
 spec:
   interval: 1h
   chart:
     spec:
       chart: openebs
-      version: 4.2.0
+      version: 4.3.2
       sourceRef:
         kind: HelmRepository
         name: openebs
@@ -41,17 +42,17 @@ spec:
       replicated:
         mayastor:
           enabled: false
+    loki:
+      enabled: false
+    alloy:
+      enabled: false
     openebs-crds:
       csi:
         volumeSnapshots:
           enabled: false
     localpv-provisioner:
       localpv:
-        image:
-          registry: quay.io/
-      helperPod:
-        image:
-          registry: quay.io/
+        enabled: true
       hostpathClass:
         enabled: true
         name: openebs-hostpath
