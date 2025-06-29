@@ -15,8 +15,8 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: minio
-          port: 9001
+        - name: minio-console
+          port: 9090
           weight: 1
 ---
 # yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/gateway.networking.k8s.io/httproute_v1.json

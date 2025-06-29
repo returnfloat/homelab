@@ -59,19 +59,6 @@ spec:
       type: ClusterIP
       ports:
         api: 9000
-        console: 9001
-    # ingress:
-    #   enabled: true
-    #   ingressClassName: internal
-    #   hostname: "minio-console.${SECRET_DOMAIN}"
-    #   tls: true
-    # apiIngress:
-    #   enabled: true
-    #   ingressClassName: external
-    #   annotations:
-    #       external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-    #   hostname: "minio.${SECRET_DOMAIN}"
-    #   tls: true
     persistence:
       enabled: true
       storageClass: nfs-csi
