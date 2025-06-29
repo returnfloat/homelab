@@ -10,7 +10,7 @@ resources:
   - ./pgadmin/ks.yaml
   - ./mosquitto/ks.yaml
   - ./redis/ks.yaml
-  # - ./grist/ks.yaml
+  - ./grist/ks.yaml
   # - ./nocodb/ks.yaml
   # - ./baserow/ks.yaml
 
