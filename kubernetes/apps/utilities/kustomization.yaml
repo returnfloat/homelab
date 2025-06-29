@@ -7,11 +7,11 @@ components:
   - ../../components/common
 resources:
   - ./cyberchef/ks.yaml
-  # - ./teslamate/ks.yaml
+  - ./teslamate/ks.yaml
   - ./nginx-static/ks.yaml
-  # - ./paperless/ks.yaml
-  # - ./outline/ks.yaml
-  # - ./vikunja/ks.yaml
+  - ./paperless/ks.yaml
+  - ./outline/ks.yaml
+  - ./vikunja/ks.yaml
   - ./drawio/ks.yaml
-  # - ./rxresume/ks.yaml
+  - ./rxresume/ks.yaml
   - ./karakeep/ks.yaml
