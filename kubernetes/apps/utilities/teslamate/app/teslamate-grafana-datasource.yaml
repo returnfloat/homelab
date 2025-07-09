@@ -33,7 +33,6 @@ spec:
             secureJsonData:
               password: {{ .TESLAMATE_DATABASE_PASS }}
             jsonData:
-              postgresVersion: 1600
               sslmode: disable
             editable: true
   dataFrom:
