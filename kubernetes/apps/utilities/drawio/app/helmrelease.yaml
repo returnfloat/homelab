@@ -25,7 +25,7 @@ spec:
           app:
             image:
               repository: jgraph/drawio
-              tag: 27.1.6
+              tag: 28.0.5
             env:
               LETS_ENCRYPT_ENABLED: "false"
               PUBLIC_DNS: "draw.${SECRET_DOMAIN}"
