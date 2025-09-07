@@ -9,7 +9,7 @@ spec:
   interval: 15m
   chartRef:
     kind: OCIRepository
-    name: app-template
+    name: pgadmin
   install:
     remediation:
       retries: -1
