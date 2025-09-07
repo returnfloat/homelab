@@ -14,7 +14,7 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: immich-db-objectstore
-        serverName: &currBucketFolder immich-db-v17-1
+        serverName: &currBucketFolder immich-db-v17-2
   storage:
     size: 20Gi
     storageClass: openebs-hostpath
@@ -40,22 +40,22 @@ spec:
   ##########################################################################################################
   # Bootstrap a new cluster from a backup in the *prevBucketFolder folder in the bucket.
   ##########################################################################################################
-  # bootstrap:
-  #   # Use this to recover a net-new cluster from a backup
-  #   recovery:
-  #     source: &prevBucketFolder immich-db-1
-  #     # recoveryTarget:
-  #     #   # Time base target for the recovery
-  #     #   targetTime: "2024-07-27 00:00:00.00000"
-  #     #   targetLSN: "81/67000060"
-  # externalClusters:
-  #   # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
-  #   - name: *prevBucketFolder
-  #     plugin:
-  #       name: barman-cloud.cloudnative-pg.io
-  #       parameters:
-  #         barmanObjectName: immich-db-objectstore
-  #         serverName: *prevBucketFolder
+  bootstrap:
+    # Use this to recover a net-new cluster from a backup
+    recovery:
+      source: &prevBucketFolder immich-db-1
+      # recoveryTarget:
+      #   # Time base target for the recovery
+      #   targetTime: "2024-07-27 00:00:00.00000"
+      #   targetLSN: "81/67000060"
+  externalClusters:
+    # This represents the s3 backup to restore from, the backup must be the same major version of the target cluster
+    - name: *prevBucketFolder
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: immich-db-objectstore
+          serverName: *prevBucketFolder
 
   # ##########################################################################################################
   # Bootstrap from an existing live cluster (same PostgreSQL major version)
