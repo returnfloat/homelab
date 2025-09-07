@@ -43,7 +43,7 @@ spec:
   bootstrap:
     # Use this to recover a net-new cluster from a backup
     recovery:
-      source: &prevBucketFolder immich-db-1
+      source: &prevBucketFolder immich-db-v17-1
       # recoveryTarget:
       #   # Time base target for the recovery
       #   targetTime: "2024-07-27 00:00:00.00000"
