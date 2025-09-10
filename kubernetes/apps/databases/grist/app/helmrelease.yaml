@@ -34,14 +34,14 @@ spec:
           # 01-check-db-ready:
           #   image:
           #     repository: postgres
-          #     tag: 16.6
+          #     tag: 17.6
           #   command: ['sh', '-c',
           #     'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
           #     do echo Waiting for PostgreSQL database; sleep 5; done;']
           02-initdb:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: 17.5
+              tag: 17.6
             envFrom:
               - secretRef:
                   name: *secret
