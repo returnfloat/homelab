@@ -61,7 +61,7 @@ spec:
           app:
             image:
               repository: baserow/baserow
-              tag: 1.35.1
+              tag: 1.35.2
             envFrom:
               - secretRef:
                   name: *secret
