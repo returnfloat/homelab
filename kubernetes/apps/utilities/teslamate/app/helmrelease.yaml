@@ -32,7 +32,7 @@ spec:
           01-check-db-ready:
             image:
               repository: postgres
-              tag: 17.6
+              tag: 17.8
             command: ['sh', '-c',
               'until pg_isready -h ${POSTGRESQL_HOST_INTERNAL} -p 5432;
               do echo Waiting for PostgreSQL database; sleep 5; done;']
