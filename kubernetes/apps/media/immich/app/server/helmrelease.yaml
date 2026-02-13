@@ -51,7 +51,7 @@ spec:
           02-initdb:
             image:
               repository: ghcr.io/home-operations/postgres-init
-              tag: 17.6
+              tag: 18.2
             envFrom:
               - secretRef:
                   name: *secret
