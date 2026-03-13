@@ -30,7 +30,7 @@ spec:
           app:
             image:
               repository: docker.io/mpepping/cyberchef
-              tag: v10.19.4
+              tag: v10.22.1
     service:
       app:
         controller: cyberchef
