@@ -67,7 +67,7 @@ spec:
           proxy:
             image:
               repository: caddy
-              tag: 2.10.2-alpine
+              tag: 2.11.4-alpine
     service:
       app:
         controller: *app
