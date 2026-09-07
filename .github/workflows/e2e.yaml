@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       - name: Setup mise
-        uses: jdx/mise-action@5228313ee0372e111a38da051671ca30fc5a96db # v3.6.3
+        uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c # v4.3.0
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
